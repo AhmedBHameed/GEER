@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "geer"
+    "name": "project"
   },
   "apps": [
     {
@@ -21,45 +21,7 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [
-        "./assets/js/hmac-sha256.js",
-        "../node_modules/tinymce/tinymce.min.js",
-        "../node_modules/tinymce/themes/modern/theme.min.js",
-        "../node_modules/tinymce/plugins/link/plugin.min.js",
-        "../node_modules/tinymce/plugins/paste/plugin.min.js",
-        "../node_modules/tinymce/plugins/table/plugin.min.js",
-        "../node_modules/tinymce/plugins/advlist/plugin.min.js",
-        "../node_modules/tinymce/plugins/anchor/plugin.min.js",
-        "../node_modules/tinymce/plugins/autolink/plugin.min.js",
-        "../node_modules/tinymce/plugins/lists/plugin.min.js",
-        "../node_modules/tinymce/plugins/image/plugin.min.js",
-        "../node_modules/tinymce/plugins/charmap/plugin.min.js",
-        "../node_modules/tinymce/plugins/print/plugin.min.js",
-        "../node_modules/tinymce/plugins/preview/plugin.min.js",
-        "../node_modules/tinymce/plugins/hr/plugin.min.js",
-        "../node_modules/tinymce/plugins/pagebreak/plugin.min.js",
-        "../node_modules/tinymce/plugins/searchreplace/plugin.min.js",
-        "../node_modules/tinymce/plugins/wordcount/plugin.min.js",
-        "../node_modules/tinymce/plugins/visualblocks/plugin.min.js",
-        "../node_modules/tinymce/plugins/visualchars/plugin.min.js",
-        "../node_modules/tinymce/plugins/code/plugin.min.js",
-        "../node_modules/tinymce/plugins/fullscreen/plugin.min.js",
-        "../node_modules/tinymce/plugins/insertdatetime/plugin.min.js",
-        "../node_modules/tinymce/plugins/media/plugin.min.js",
-        "../node_modules/tinymce/plugins/nonbreaking/plugin.min.js",
-        "../node_modules/tinymce/plugins/save/plugin.min.js",
-        "../node_modules/tinymce/plugins/contextmenu/plugin.min.js",
-        "../node_modules/tinymce/plugins/directionality/plugin.min.js",
-        "../node_modules/tinymce/plugins/emoticons/plugin.min.js",
-        "../node_modules/tinymce/plugins/template/plugin.min.js",
-        "../node_modules/tinymce/plugins/textcolor/plugin.min.js",
-        "../node_modules/tinymce/plugins/colorpicker/plugin.min.js",
-        "../node_modules/tinymce/plugins/textpattern/plugin.min.js",
-        "../node_modules/tinymce/plugins/imagetools/plugin.min.js",
-        "../node_modules/tinymce/plugins/codesample/plugin.min.js",
-        "../node_modules/tinymce/plugins/toc/plugin.min.js",
-        "../node_modules/tinymce/plugins/help/plugin.min.js"
-      ],
+      "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",
@@ -93,9 +55,6 @@
   },
   "defaults": {
     "styleExt": "css",
-    "class": {
-      "spec": false
-    },
     "component": {}
   }
 }

@@ -8,7 +8,7 @@ declare var window: any;
 export class FunctionsService {
   public url = environment.backendUrl;
   constructor(private http: Http) {}
-  notify(data){
+  notify(data) {
       $.notify({
       // options
       icon: data.icon,
@@ -16,7 +16,7 @@ export class FunctionsService {
       message: data.message,
       url: data.url || null,
       target: data.target || null
-    },{
+    }, {
       // settings
       element: 'body',
       position: null,
