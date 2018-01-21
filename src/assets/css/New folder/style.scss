@@ -1,0 +1,21 @@
+
+$navBarColor :#2196F3;
+$asideFolderColor: #7A7A7A;
+$disabledMenuOption : #cacaca;
+$selectionColor: #DC143C;
+
+* {
+    box-sizing: border-box;
+}
+
+@import './bootstrap-sass-master/assets/stylesheets/_bootstrap.scss';
+
+@import './_options';
+@import './_mixins';
+@import './_media';
+
+body{
+    color: white;
+    background: #DDD;
+    @import './pageSections/_navbar.scss';
+}

@@ -1,0 +1,9 @@
+<div class="col-lg-12">
+  <div class="row">
+    <ol class="breadcrumb">
+      <li *ngFor="let breadcrumb of breadcrumbs; let l= last" [class.active]="l">
+        <a [routerLink]="[breadcrumb.url]" >{{breadcrumb.label}}</a>
+      </li>
+    </ol>
+  </div>
+</div>

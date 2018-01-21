@@ -1,0 +1,129 @@
+<app-title [class]="class" [title]="title"></app-title>
+<div class="col-xs-12">
+  <section class="bodyOfSection">
+    <div class="col-xs-12">
+
+
+
+
+
+      <form novalidate [formGroup]="form" (ngSubmit)="save(form.value, form.valid)" enctype="multipart/form-data"
+            class="form-horizontal registrate">
+        
+        <div class="form-group" [class.validation]="!form.controls.us_username.valid || (!form.controls.us_username.pristine && submitted)">
+          <label for="Username" class="col-sm-2 control-label">User Name <span>*</span>:</label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="us_username" name="us_username" class="form-control" id="Username"
+                   placeholder="Type your username">
+          </div>
+          <div class="col-sm-4">
+              <small [hidden]="form.controls.us_username.valid || (form.controls.us_username.pristine && !submitted)">username required (minimum length 3 charectors)</small>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="Email" class="col-sm-2 control-label">Email Address <span>*</span>:</label>
+
+          <div class="col-sm-4" [class.validation]="!form.controls.us_email.valid || (!form.controls.us_email.pristine && submitted)">
+            <input type="email" formControlName="us_email" name="us_email" class="form-control" id="Email"
+                   placeholder="Enter a valid email address">
+            <small [hidden]="form.controls.us_email.valid || (form.controls.us_email.pristine && !submitted)">enter valid email like name@example.com</small>
+          </div>
+        </div>
+                                
+        <div class="form-group">
+          <label for="Password" class="col-sm-2 control-label">Password <span>*</span>:</label>
+
+          <div class="col-sm-3" [class.validation]="!form.controls.us_password.valid || (!form.controls.us_password.pristine && submitted)">
+            <input type="password" formControlName="us_password" name="us_password" class="form-control" id="Password"
+                   placeholder="Password">
+            <small [hidden]="form.controls.us_password.valid || (form.controls.us_password.pristine && !submitted)">Type a password</small>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="inputConfirmPassword" class="col-sm-2 control-label">Re-type Password <span>*</span>:</label>
+
+          <div class="col-sm-3" [class.validation]="!form.controls.us_retype_password.valid || (!form.controls.us_retype_password.pristine && submitted)">
+            <input type="password" formControlName="us_retype_password" name="us_retype_password" class="form-control"
+                   id="inputConfirmPassword"
+                   placeholder="Confirm Password">
+            <small [hidden]="form.controls.us_retype_password.valid || (form.controls.us_retype_password.pristine && !submitted)">retype your password</small>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="inputImageProfile" class="col-sm-2 control-label">Image or Icon:</label>
+
+          <div class="col-sm-3">
+            <input type="file" name="image" (change)="chooseImage($event)" class="form-control" id="inputImageProfile">
+          </div>
+        </div>
+        
+        <div class="form-group" alt="Your image Profile">
+          <label class="col-sm-2 control-label">Image Preview:</label>
+
+          <div class="col-sm-4">
+            <img width="100px" height="100px" class="imagePreview" src="assets/img/avatar/non-avatar.jpg" alt="">
+          </div>
+        </div>
+        
+        <div class="form-group" [class.validation]="!form.controls.us_gender.valid || (!form.controls.us_gender.pristine && submitted)">
+          <label for="inputGender" class="col-sm-2 control-label">Gender:</label>
+
+          <div class="col-sm-2">
+            <select class="form-control" formControlName="us_gender" name="us_gender" id="inputGender">
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+            <small [hidden]="form.controls.us_gender.valid || (form.controls.us_gender.pristine && !submitted)">please specify gender!</small>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="about" class="col-sm-2 control-label">Discription:</label>
+
+          <div class="col-sm-4">
+            <textarea class="form-control" formControlName="us_about" id="about" placeholder="Write Discription about you" rows="4"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group" [class.validation]="!form.controls.us_policies.valid || (!form.controls.us_policies.pristine && submitted)">
+          <div class="col-sm-offset-2 col-sm-10">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" formControlName="us_policies"> I accept all <a href="policies.php">policies</a>
+                mentioned in
+                GEER
+                webpage.
+              </label>
+              <br>
+              <small [hidden]="form.controls.us_policies.valid || (form.controls.us_policies.pristine && !submitted)">Please check policies!</small>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: none" class="col-lg-4 col-lg-offset-2 text-center alert alert-success loginSuccessful" role="alert">{{msg}}</div>
+        <div style="display: none" class="col-lg-4 col-lg-offset-2 text-center alert alert-danger loginError" role="alert">{{msg}}</div>
+        <div *ngIf="loading" class="result col-lg-4 col-lg-offset-2 text-center"
+             style="border-radius: 50px; margin-bottom: 10px;background: #999; color: darkred">
+          <i class='fa fa-cog fa-2x fa-spin fa-fw'></i>
+          <h3 style='color:darkred; display:inline-block'> Loading...</h3>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button [disabled]="!form.valid" type="submit" class="btn btn-success"><i class="fa fa-pencil"></i> Sign in</button>
+          </div>
+        </div>
+      </form>
+
+
+      
+
+
+    </div>
+    <div class="clearfix"></div>
+  </section>
+</div>

@@ -1,0 +1,18 @@
+<app-navbar
+  *ngIf="isThatAdmin && gs.adminNavbarActive"
+  [config]="gs"
+  [navigation]="navbar_links"
+  [isAdmin]="isThatAdmin"
+  (onLogout)="logout($event)">
+</app-navbar>
+
+<div *ngIf="isThatAdmin" class="container-fluid">
+  <div class="admin-body">
+    <div class="row">
+      <section class="col-xs-12" *ngIf="isThatAdmin">
+        <router-outlet></router-outlet>
+      </section>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,61 @@
+<app-title [title]="title"></app-title>
+<div class="col-xs-12" id="comments">
+  <section class="bodyOfSection">
+    <!-- It is shown when no comment available -->
+    <div class="col-xs-12">
+      <div *ngIf="!toShow" class="col-xs-12 text-center">
+        <div class="alert alert-warning" role="alert">{{msg}}</div>
+      </div>
+    </div>
+    <section *ngIf="toShow">
+      <div *ngFor="let comment of comments | paginate: opt"
+          class="col-xs-12 commantsSection" id="{{comment.co_comm_id}}">
+
+        <div class="col-xs-1">
+          <img class="img-thumbnail" src="{{url+comment.us_image}}"/>
+        </div>
+
+        <div class="col-md-11">
+          <P><i class="fa fa-comments margin-right"></i>{{comment.us_username}}<span class="pull-right">(Comments)</span>
+          </P>
+
+          <p class="lead no-vertical-margin margin-top">{{comment.co_comment}}</p>
+          <hr class="margin-top">
+          <div class="articalinfo">
+            <div class="col-md-12 item-bg-color padding-all">
+              <i class="fa fa-user"></i> by: <a href="#">{{comment.us_username}}</a> | <i
+              class="fa fa-clock-o"></i> at: <a class="#"> {{comment.co_date}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 margin-top">
+        <hr class="margin-top">
+        <pagination-controls (pageChange)="pagination($event)"></pagination-controls>
+      </div>
+    </section>
+
+    <!-- Mainpulating With Adding comment -->
+    <div class="col-xs-12 commantsSection">
+      <div *ngIf="!addingComment" class="col-xs-12 text-center">
+        <div class="alert alert-warning" role="alert">Login to add your comment.</div>
+      </div>
+      <form *ngIf="addingComment" [formGroup]="form" (ngSubmit)="addComment(form.value, form.valid)" class="form-horizontal">
+        <div class="col-xs-1">
+          <img class="img-thumbnail" src="{{url+userData.us_image}}"/>
+        </div>
+
+        <div class="col-xs-11">
+          <textarea [class.validation]="form.valid" #comment (keyup.enter)="addComment(form.valid, comment); comment.value = '' " type="text" formControlName="co_comment" class="form-control" placeholder="Add your comment"
+                        rows="2"></textarea>
+        </div>
+      </form>
+    </div>
+
+
+    <div class="clearfix"></div>
+  </section>
+</div>
+
+ <!-- <disqus [identifier]="pageId" [url]="url" [category]="catId" [lang]="'en'" (comment)="onComment($event)"></disqus>  -->

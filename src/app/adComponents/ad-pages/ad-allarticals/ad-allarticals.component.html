@@ -1,0 +1,47 @@
+<div class="panel panel-info">
+  <div class="panel-heading"><b>All categories</b></div>
+  <div class="panel-body">
+    <!-- <div class="col-xs-12"> -->
+      <table class="table table-striped">
+        <thead style="background: #EEE;">
+          <tr>
+            <th>#</th>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Author</th>
+            <th>Date</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody class="post-body">
+          <tr *ngFor="let artical of articals | paginate: opt; let i = index">
+            <th>{{i}}</th>
+            <th><img style="width: 80px; border-radius: 10px;" class="img-thumbnail" alt="test2" src="{{url}}{{artical.po_image}}"></th>
+            <th>{{artical.po_title | trim: '10'}}</th>
+            <th>{{artical.ca_category}}</th>
+            <th>{{artical.us_username}}</th>
+            <th>{{artical.po_post_date}}</th>
+            <th>
+              <div *ngIf="artical.po_status == 'published'">
+                <a type="button" (click)="publish($event, artical.po_status, artical.po_post_id, i)" style="display: block" class="btn btn-success">{{artical.po_status}}</a>
+              </div>
+              <div *ngIf="artical.po_status == 'dreft'">
+                <a type="button" (click)="publish($event, artical.po_status, artical.po_post_id, i)" style="display: block" class="btn btn-info">{{artical.po_status}}</a>
+              </div>
+              <a type="button" href="../post.php?cat=7&amp;id=11" style="display: block" class="btn btn-primary" target="_blank">View</a>
+              <a type="button" href="posts.php?page=1&amp;delete=11" style="display: block" class="btn btn-danger">Delete</a>
+              <a type="button" (click)="edite($event, artical, opt.currentPage)" style="display: block" class="btn btn-warning">Edite</a>
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    <!-- </div> -->
+
+    <div class="pagination">
+        <app-pagination [option]="opt" (onPageClicked)="clickedPage($event)" ></app-pagination> 
+    </div>
+
+  </div>
+</div>
+

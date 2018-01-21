@@ -1,0 +1,85 @@
+<app-title [title]="title"></app-title>
+<!-- Body of title Section -->
+<div class="col-xs-12">
+  <section class="bodyOfSection">
+
+    <div style="width: 100%; height: 500px;">
+			
+				<div class="tour slide">
+				  <!-- Indicators -->
+				  <ol class="tour-indicators">
+					  <li *ngFor="let data of carouselData; let i = index" [class.active]="i==0"></li>
+				  </ol>
+
+				  <!-- Wrapper for slides -->
+				  <div class="tour-inner" role="listbox">
+
+
+					  <div class="item" *ngFor="let data of carouselData; let i = index;let f = first; let l = last" [class.active]="f">
+						  <img src="{{url+data.po_image}}" alt="...">
+						  <div class="tour-caption">
+							  <a [routerLink]="['','post', data.po_post_id]"><h2>{{data.po_title}}</h2></a>
+							  <div>{{data.po_post | striptags | trim: 150}}</div>
+						  </div>
+					  </div>
+
+				</div>
+
+
+
+
+				  <!-- Controls -->
+				  <a class="left tour-control" role="button" data-slide="prev">
+					<span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+				  </a>
+				  <a class="right tour-control" role="button" data-slide="next">
+					  <span><i class="fa fa-chevron-right" aria-hidden="true"></i></span>
+				  </a>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" style="width: 100%; height:350px">
+      
+      <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" *ngFor="let data of carouselData; let i = index"
+            [attr.data-slide-to]="i" [class.active]="i==0"></li>
+      </ol>
+      
+      <div class="carousel-inner" role="listbox">
+        <div class="item" *ngFor="let data of carouselData; let i = index;let f = first;" [class.active]="f">
+          <img src="{{url+data.image}}" alt="{{data.title}}">
+
+          <div class="caption">
+            <div class="col-xs-12 text-center">
+              <div class="glassyBackground">
+                <h1>{{data.title}}</h1>
+
+                <p class="lead appendText">{{data.post}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <a class="left carousel-control" role="button" data-slide="prev">
+        <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+      </a>
+      <a class="right carousel-control" role="button" data-slide="next">
+        <span><i class="fa fa-chevron-right" aria-hidden="true"></i></span>
+      </a>
+    </div>-->
+  </section>
+</div>

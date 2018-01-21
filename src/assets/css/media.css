@@ -1,0 +1,141 @@
+ /*Smart Phones Screen */
+    @media (max-width: 767px)
+    {
+        /* NavBar section */
+            .navbar .navbar-brand { padding: 0px 15px; }
+            .navbar .brand-caption { font-size: 28px; padding: 15px 15px; }
+        /* NavBar section */
+
+        /* Banner Section */
+            .banner
+            {
+                height: 200px;
+            }
+            .banner h3
+            {
+                font-size: 18px;
+            }
+            .banner p
+            {
+                font-size: 14px;
+            }
+        /* Banner Section */
+
+        /* FloatDiv Section */
+            .floatDiv { top: 80%; right: 0%; }
+        /* FloatDiv Section */
+
+        /* Bread Section*/
+            .webmap 
+            {
+                font-size: 10px;
+            }
+            .webmap ol li .arrow
+            {
+                z-index: 20;
+                right: -12px;
+                border-left: 12px solid #aaa;
+                border-top: 15px solid transparent;
+                border-bottom: 15px solid transparent;
+            }
+            .webmap ol li .arrow:after 
+            { 
+                top: -15px;
+                border-left: 12px solid #444;
+                border-top: 15px solid transparent;
+                border-bottom: 15px solid transparent;
+            }
+        /* Bread Section*/
+
+        /* Profile Section */
+            .profile .image-profile div:nth-of-type(2) img
+            {
+                width: 95%;
+            }
+            .profile .user-data h2
+            {
+                font-size: 14px;
+            }
+            .profile .user-data i
+            {
+                line-height: 25px;
+            }
+        /* Profile Section */
+
+        /* Error Page */
+            .error .clip .shadow
+            {
+                height: 100px;  /*Contrall*/
+            }
+            .error .clip:nth-of-type(2) .shadow
+            {
+                width: 80px;   /*Contrall play with javascript*/ 
+            }
+            .error .clip:nth-of-type(1) .shadow, .error .clip:nth-of-type(3) .shadow
+            {
+                width: 100px; /*Contrall*/
+            }
+            .error .digit
+            {
+                width: 80px;   /*Contrall*/
+                height: 80px;  /*Contrall*/
+                line-height: 80px; /*Contrall*/
+                font-size: 52px;
+            }
+            .error .clip:nth-of-type(2) .digit
+            {
+                left: 0%;
+            }
+            .error .clip:nth-of-type(1) .digit
+            {
+                right: -19%;
+            }.error .clip:nth-of-type(3) .digit
+            {
+                left: -21%;
+            }
+            .error h2   /*Contrall*/
+            {
+                font-size: 24px;
+            }
+            .error .msg /*Contrall*/
+            {
+                top: -120px;
+                left: 5%;
+                width: 40px;
+                height: 40px;
+                line-height: 40px;
+                font-size: 18px;
+            }
+            .error span.triangle    /*Contrall*/
+            {
+                top: 70%;
+                right: -3%;
+                border-left: 10px solid #535353;
+                border-top: 8px solid transparent;
+                border-bottom: 8px solid transparent;
+            }
+            .error .container-error-404
+            {
+                height: 150px;;
+            }
+        /* Error Page */
+    }
+/* Smart Phones Screen */
+/* Small Screen */
+    @media (min-width: 768px) and (max-width: 991px)
+    {
+        
+    }
+/* Small Screen */
+/* Medium Screen */
+    @media (max-width: 992px) and (max-width: 1199px)
+    {
+        
+    }
+/* Medium Screen */
+/* Large Screen */
+    @media (min-width: 1200px)
+    {
+        
+    }
+/* Large Screen 

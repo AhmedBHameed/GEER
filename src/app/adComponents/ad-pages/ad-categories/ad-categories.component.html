@@ -1,0 +1,53 @@
+<div class="ad-categories">
+  <div class="panel panel-warning">
+    <div class="panel-heading"><b>Adding New Category</b></div>
+    <div class="panel-body">
+      <div class="col-lg-12">
+        <form *ngIf="showForm" [formGroup]="categoryForm" (ngSubmit)="addCategory(categoryForm.value, categoryForm.valid)" class="form-inline">
+          <div class="form-group">
+            <div class="col-lg-5 col-md-5">
+              <label for="cattitle" class="control-label">Add/Edite Category:</label>
+            </div>
+            <div class="col-md-4">
+              <input formControlName="category" type="text" class="form-control" id="cattitle" placeholder="Category name">
+              <small [hidden]="!submitted || categoryForm.controls.ca_category.valid">Minimum charachter is 3</small>
+            </div>
+          </div>
+          <div class="pull-right">
+            <button *ngIf="submitType == 'Update'" (click)="cancel()" class="btn btn-info">Cancel</button>
+            <input [disabled]="!categoryForm.valid" type="submit" class="btn btn-warning" value="{{submitType}}">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ad-categories">
+  <div class="panel panel-info">
+    <div class="panel-heading"><b>All categories</b></div>
+    <div class="panel-body">
+      <table class="table table-striped">
+        <thead style="background: #EEE;">
+          <tr>
+            <th>#</th>
+            <th>Category</th>
+            <th>Date of adding</th>
+            <th>Edite</th>
+            <th>Delete</th>
+          </tr>
+        </thead>
+        <tbody class="cat-body">
+
+          <tr *ngFor="let cat of categories; let i = index">
+            <th>{{i+1}}</th>
+            <th>{{cat.category}}</th>
+            <th>{{cat.date}}</th>
+            <th><a type="button" (click)="delete(cat.id, i)" class="btn btn-danger">Delete</a></th>
+            <th><a type="button" (click)="update(cat, i)" class="btn btn-warning">Edite</a></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+.imagemanager{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 60%;
+    height: 400px;
+    margin: 0 auto;
+    z-index: 99;
+    border: 1px solid black;
+}
+.header{
+    display: inline-block;
+}

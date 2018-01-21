@@ -1,0 +1,1 @@
+<textarea class="tinymce"></textarea>

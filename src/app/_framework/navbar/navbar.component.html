@@ -1,0 +1,74 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <nav class="navigation">
+            <div class="nav-brand-title">
+                <div class="content-center">
+                    <div class="brand">
+                        <a [routerLink]="['']">
+                            <img alt="Brand" src="{{config.backendUrl}}{{config.settings.logo}}">
+                        </a>
+                    </div>
+                    <div class="caption">
+                        <a [routerLink]="['']">{{config.settings.title}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-items">
+                <div class="hamburger">
+                    <a href="#">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="welcome">
+                    <span>Welcome&nbsp;,&nbsp;</span><span class="caption">{{config.username}}</span>
+                    <span *ngIf="config.adminNavbarActive">
+                      <div class="triangle"></div>
+                      <span>&nbsp;SESSION TIME:&nbsp;</span>
+                      <span class="caption">{{STO}}</span>
+                    </span>
+                </div>
+                <div class="bg-brightness"></div>
+            </div>
+            <div class="fixed-menu">
+                <h3>Navigation</h3>
+                <ul *ngIf="!config.adminNavbarActive">
+                    <li><a [routerLink]="['']">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#">
+                            <span class="triangle">Categories</span>
+                        </a>
+                    </li>
+                    <ul class="menu-list">
+                        <li *ngFor="let cat of navigation"><a [routerLink]="cat.routerLink.split(',')"> {{cat.caption}}</a></li>
+                    </ul>
+                    <li><a href="#">About Us</a></li>
+                    <li class="dropdown">
+                        <a href="#">
+                            <span class="triangle">Settings</span>
+                        </a>
+                    </li>
+                    <ul class="menu-list">
+                        <li><a *ngIf="!isAdmin" [routerLink]="['','signin']">Sign in</a></li>
+                        <li><a *ngIf="!isAdmin" [routerLink]="['','login']">Log in</a></li>
+                        <li><a *ngIf="isAdmin" [routerLink]="['','admin']">Administrator</a></li>
+                        <li><a *ngIf="isAdmin" (click)="logout($event)">Log out</a></li>
+                    </ul>
+                </ul>
+                <ul *ngIf="config.adminNavbarActive">
+                    <li *ngFor="let cat of navigation"><a [routerLink]="cat.routerLink.split(',')"><i class="{{cat.fontawesome}}" aria-hidden="true"></i> {{cat.caption}}</a></li>
+                    <li class="dropdown">
+                        <a href="#">
+                            <span class="triangle">Menu</span>
+                        </a>
+                    </li>
+                    <ul class="menu-list">
+                        <li><a *ngIf="!isAdmin" [routerLink]="['','signin']">Sign in</a></li>
+                        <li><a *ngIf="!isAdmin" [routerLink]="['','login']">Log in</a></li>
+                        <li><a *ngIf="isAdmin" [routerLink]="['','admin']">Administrator</a></li>
+                        <li><a *ngIf="isAdmin" href="#" (click)="logout($event)">Log out</a></li>
+                    </ul>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</nav>

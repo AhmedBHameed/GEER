@@ -1,0 +1,138 @@
+<div class="ad-setting">
+  <div class="panel panel-info">
+    <div class="panel-heading"><b>Settings</b></div>
+      <div class="panel-body">
+        <form *ngIf="showForm" [formGroup]="settingsForm" (ngSubmit)="send(settingsForm.value, settingsForm.valid)" class="form-horizontal" enctype="multipart/form-data">
+          <fieldset class="fieldset">
+            <legend class="legend"><b>Header information</b></legend>
+              <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">Website Title</label>
+                <div class="col-lg-4 col-md-4">
+                  <input formControlName="title" type="text" class="form-control" name="title" id="title" placeholder="Type website name">
+                  <small [hidden]="settingsForm.controls.title.valid">Title required!</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="metaname" class="col-sm-2 control-label">Meta tag name:</label>
+                <div class="col-lg-4 col-md-4">
+                  <input formControlName="meta_name" type="text" class="form-control" name="metaname" id="metaname" placeholder="Type a name describe your webpage">
+                  <small [hidden]="settingsForm.controls.meta_name.valid || (settingsForm.controls.meta_name.pristine && !submitted)">Meta name must not be empty!</small>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="metadescription" class="col-sm-2 control-label">Meta description:</label>
+                <div class="col-sm-4">
+                  <textarea formControlName="meta_description" type="text" class="form-control" name="metadescription" id="metadescription" rows="4" placeholder="Type your website description">Content Management system</textarea>
+                  <small [hidden]="settingsForm.controls.meta_description.valid || (settingsForm.controls.meta_description.pristine && !submitted)">Meta descreption must not be empty! Important for SEO</small>
+                </div>
+              </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend"><b>Logo / Banner / Slider</b></legend>
+              
+              <div class="form-group">
+                <label for="logo" class="col-sm-2 control-label">Logo:</label>
+                <div class="col-lg-4 col-md-4">
+                  <input (change)="changeLogoImage($event)" type="file" class="form-control" id="logo">
+                  <small class="help-block">Extention accepted (jpg, jpeg, png, gif)</small>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="logo" class="col-sm-2 control-label">Image:</label>
+                <div class="col-lg-3 col-md-3">
+                  <img src="{{logoImg}}" alt="Logo" class="img-thumbnail logoimg">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="logo" class="col-sm-2 control-label">Banner:</label>
+                <div class="col-lg-4 col-md-4">
+                  <input (change)="changeBannerImage($event)" type="file" class="form-control" id="logo">
+                  <small class="help-block">Extention accepted (jpg, jpeg, png, gif)</small>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Banner:</label>
+                <div class="col-lg-3 col-md-3">
+                  <img src="{{bannerImg}}" alt="Banner" class="img-thumbnail bannerimg">
+                </div>
+              </div>
+            <div class="form-group">
+              <label for="slide" class="col-sm-2 control-label">Gategory of slides:</label>
+              <div class="col-sm-4">
+                <select formControlName="slide_category_id" class="form-control" name="catslide" id="slide">
+                  <option *ngFor="let cat of categories" [value]="cat.id">{{cat.category}}</option>
+                </select>
+                <small [hidden]="settingsForm.controls.slide_category_id.valid || (settingsForm.controls.slide_category_id.pristine && !submitted)">Please specify slider category! If there are not category then define them in <a [routerLink]="['','admin','categories']">here</a></small>
+              </div>
+
+              <label for="slidenum" class="col-sm-2 control-label">Post number:</label>
+              <div class="col-sm-2">
+                <input formControlName="slide_post_num" type="number" class="form-control" name="catslidenum" id="slidenum" min="3" max="15">
+                <small [hidden]="settingsForm.controls.slide_post_num.valid || (settingsForm.controls.slide_post_num.pristine && !submitted)">Required!</small>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend"><b>Social media</b></legend>
+          
+              <div class="form-group">
+              <label for="facebook" class="col-sm-2 control-label">Facebook</label>
+                <div class="col-lg-9 col-md-9">
+                  <input formControlName="facebook" type="text" class="form-control" name="facebook" id="facebook" placeholder="Your facebook">
+                </div>
+              </div>
+
+              <div class="form-group">
+              <label for="youtube" class="col-sm-2 control-label">Youtube</label>
+                <div class="col-lg-9 col-md-9">
+                  <input formControlName="youtube" type="text" class="form-control" name="youtube" id="youtube" placeholder="Your Youtube">
+                </div>
+              </div>
+
+              <div class="form-group">
+              <label for="googleplus" class="col-sm-2 control-label">Google Plus</label>
+                <div class="col-lg-9 col-md-9">
+                  <input formControlName="googleplus" type="text" class="form-control" name="googleplus" id="googleplus" placeholder="Your Google Plus">
+                </div>
+              </div>
+
+              <div class="form-group">
+              <label for="twitter" class="col-sm-2 control-label">Twitter</label>
+                <div class="col-lg-9 col-md-9">
+                  <input formControlName="twitter" type="text" class="form-control" name="twitter" id="twitter" placeholder="Your Twitter">
+                </div>
+              </div>
+
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="legend"><b>Control Panel Settings</b></legend>
+          
+              <div class="form-group">
+              <label for="session" class="col-sm-2 control-label">Session time:</label>
+                <div class="col-lg-3 col-md-3">
+                  <select formControlName="session_time" class="form-control" name="catslide" id="session">
+                    <option value="10">10 Minutes</option>
+                    <option value="15">15 Minutes</option>
+                    <option value="30">30 Minutes</option>
+                    <option value="60">1 Hour</option>
+                  </select>
+                  <small [hidden]="settingsForm.controls.session_time.valid || (settingsForm.controls.session_time.pristine && !submitted)">Required!</small>
+                </div>
+              </div>
+
+          </fieldset>
+          
+          <hr>
+          <br>
+          <button type="submit" name="update" class="btn btn-default btn-info">Update</button>
+
+        </form>
+
+    </div>
+  </div>
+</div>

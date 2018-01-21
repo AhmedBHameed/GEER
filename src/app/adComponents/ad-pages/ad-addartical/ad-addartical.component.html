@@ -1,0 +1,68 @@
+<div class="panel panel-info">
+  <div class="panel-heading"><b>Add new post</b></div>
+  <div class="panel-body">
+    <form [formGroup]="articalForm" (ngSubmit)="send(articalForm.value, articalForm.valid)" class="form-horizontal" id="articalform"
+      enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="arttitle" class="col-sm-2 control-label">Artical title:</label>
+        <div class="col-sm-5">
+          <input type="text" formControlName="po_title" value="" class="form-control" id="arttitle" placeholder="Artical title">
+          <small [hidden]="!submitted || articalForm.controls.po_title.valid">Title is required!</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="image" class="col-sm-2 control-label">Artical Image:</label>
+        <div class="col-sm-5">
+          <input type="file" name="image" (change)="chooseArticalImage($event)" class="form-control" id="image">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="artical" class="col-sm-2 control-label">Image:</label>
+        <div class="col-sm-5">
+          <img src="{{articalImage}}" alt="Logo" id="artical" class="img-thumbnail articalImage">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="artical" class="col-sm-2 control-label">Artical:</label>
+        <div class="col-sm-8">
+          <tinymce [content]="post_body" (onEditorKeyup)="keyupHandlerFunction($event)"></tinymce>
+          <small [hidden]="!submitted || articalForm.controls.po_post.valid">Post body is required!</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="category" class="col-sm-2 control-label">Category:</label>
+        <div class="col-sm-5">
+          <select name="category" formControlName="po_category" class="form-control" id="category">
+              <option value="">Choose category</option>
+              <option *ngFor="let cat of categories" value="{{cat.ca_cat_id}}">{{cat.ca_category}}</option>
+            </select>
+          <small [hidden]="!submitted || articalForm.controls.po_category.valid">Please specify post category!</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="status" class="col-sm-2 control-label">Status:</label>
+        <div class="col-sm-2">
+          <select name="status" formControlName="po_status" class="form-control" id="status">
+              <option value="published">Published</option>
+              <option value="dreft">Dreft</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <input type="submit" name="add_post" class="btn btn-default btn-info" value="{{modeType}}">
+          <button *ngIf="modeType == 'Save'" (click)="reset()" name="add_post" class="btn btn-default btn-info">Cancel</button>
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>
