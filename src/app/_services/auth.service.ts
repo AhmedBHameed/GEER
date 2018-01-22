@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { FunctionsService } from './_functions/functions.service';
 import { Router } from '@angular/router';
+import { FunctionsService } from './_functions/functions.service';
 // import { Observable } from 'rxjs/Rx';
 // import 'rxjs/Rx';
 // import 'rxjs/add/operator/map'
 
-declare var CryptoJS: any;
 @Injectable()
 export class AuthService {
   public tokenLoop: any;
@@ -13,9 +12,9 @@ export class AuthService {
   }
 
   cash(key: string, data: any, isPermanent: boolean = false){
-    if(isPermanent){
+    if (isPermanent) {
       window.localStorage.setItem( key , data );
-    }else{
+    } else {
       window.sessionStorage.setItem( key , data );
     }
   }
@@ -35,10 +34,8 @@ export class AuthService {
     this.clearCash();
     this.router.navigate(['', 'login']);
   }
-    
-  
   //=========================== Sign in Page ========================
-  signIn(data: any){
+  signIn(data: any) {
     // let header = new Headers({"Content-Type": "application/x-www-form-urlencoded"}); // this is like ajax request;
     return this.fn.makeRequest('signin', 'Post', data);
   }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, RequestMethod, Request } from '@angular/http';
 import { environment } from '../../../environments/environment';
+import * as moment from 'moment';
 
 declare var $: any;
 declare var window: any;
@@ -60,18 +61,18 @@ export class FunctionsService {
   makeRequest(page = null, type = null, data = null) {
     let header = new Headers(),
       opt;
-    if (type == "Post") {
-      header.append("Accept", "application/json");
-      header.append("Content-Type", "application/json");
+    if (type === 'Post') {
+      header.append('Accept', 'application/json');
+      header.append('Content-Type', 'application/json');
       opt = new RequestOptions({
         headers: header,
         url: this.url + page,
         method: RequestMethod[type],
-        body: (JSON.stringify(data)).replace(/\s+/g, '')
+        body: this.stringify(data)
       });
     }
-    if (type == "Get") {
-      header.append("Accept", "application/json");
+    if (type === 'Get') {
+      header.append('Accept', 'application/json');
       opt = new RequestOptions({
         headers: header,
         url: this.url + page + '?query=' + window.encodeURI(data.query.replace(/\r?\n?↵?\s+/g, '')),
@@ -83,8 +84,8 @@ export class FunctionsService {
   makeBinaryRequest(page = null, type = null, data = null) {
     let header = new Headers(),
       opt;
-    if (type == "Post") {
-      header.append("Accept", "application/json");
+    if (type === 'Post') {
+      header.append('Accept', 'application/json');
       // header.append("Content-Type", "multipart/form-data; charset=utf-8; boundary=\"------WebKitFormBoundary\"");
       opt = new RequestOptions({
         headers: header,
@@ -93,8 +94,8 @@ export class FunctionsService {
         body: data
       });
     }
-    if (type == "Get") {
-      header.append("Accept", "application/json");
+    if (type === 'Get') {
+      header.append('Accept', 'application/json');
       opt = new RequestOptions({
         headers: header,
         url: this.url + page,
@@ -135,21 +136,8 @@ export class FunctionsService {
         message: message
     });
   }
-  // private makeRequestJsonp(page=null, data=null){ // this is jsonp request
-  //     let header = new Headers(), opt;
-  //     header.append("Accept", "application/json");
-  //   header.append('X-CSRF-Token', localStorage.getItem('token'));
-  //       opt = new RequestOptions({headers: header,
-  //                                       url: this.url+page+'/cb=JSONP_CALLBACK',
-  //                                       method: RequestMethod.Get,
-  //                                     });
-  //     return this.jsonp.request(new Request(opt));
-  //   }
-  //   test(){
-  //     return this.makeRequestJsonp('adcanaccesstwo', {"token":localStorage.getItem('token')});
-  // }
-  getToken():any {
-    let token = window.localStorage.getItem('token') || window.sessionStorage.getItem('token');
+  getToken(): any {
+    let token = window.localStorage.getItem('geertoken') || window.sessionStorage.getItem('geertoken');
     if(typeof token == 'string'){
       let tokenCondition = token.split(".");
       if(tokenCondition.length == 3){
@@ -161,7 +149,7 @@ export class FunctionsService {
       return false;
     }
   }
-  isAuthUser(authType='user'){
+  isAuthUser(authType: string = 'user') {
     let cradentials = this.getToken(), type = window.localStorage.getItem('type') || window.sessionStorage.getItem('type');
     if(typeof cradentials == 'string' && type != authType){
       return true;
@@ -195,29 +183,6 @@ export class FunctionsService {
       });
     }
   }
-  trimData(data, options){
-    let optArray;
-    if (typeof options == 'object') {
-      optArray = Object.keys(options)
-    };
-    if (Array.isArray(data)) {
-      for (let index in data) {
-        for (let item in data[index]) {
-          if (optArray.indexOf(item) > -1) {
-            data[index][item] = data[index][item].substr(0, options[item])+' ...';
-          } else {
-            data[index][item] = data[index][item];
-          }
-        }
-      }
-    } else {
-      return data;
-    }
-    console.log(data);
-    
-    return data;
-    
-  }
   getIndex(arrayObject:any, ofRow:any){
     if(typeof arrayObject != 'object'){
       throw new Error('Invalid object. search index should be in object only');
@@ -232,6 +197,21 @@ export class FunctionsService {
     }
     return null;
   }
+  dateAs(format: string = 'YYYY-MM-DD') {
+    return moment(new Date()).format(format);
+  }
 
-
+  // private makeRequestJsonp(page=null, data=null){ // this is jsonp request
+  //     let header = new Headers(), opt;
+  //   header.append('Accept', 'application/json');
+  //   header.append('X-CSRF-Token', localStorage.getItem('token'));
+  //       opt = new RequestOptions({headers: header,
+  //                                       url: this.url+page+'/cb=JSONP_CALLBACK',
+  //                                       method: RequestMethod.Get,
+  //                                     });
+  //     return this.jsonp.request(new Request(opt));
+  //   }
+  //   test(){
+  //     return this.makeRequestJsonp('adcanaccesstwo', {"token":localStorage.getItem('token')});
+  // }
 }

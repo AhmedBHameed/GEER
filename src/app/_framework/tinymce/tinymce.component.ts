@@ -6,12 +6,10 @@ import {
   Output,
   Input
 } from '@angular/core';
-import {
-  environment
-} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 
-declare var tinymce:any;
+declare var tinymce: any;
 @Component({
   selector: 'tinymce',
   templateUrl: './tinymce.component.html',
@@ -19,14 +17,13 @@ declare var tinymce:any;
 })
 export class TinymceComponent implements AfterViewInit, OnDestroy {
   @Output() onEditorKeyup = new EventEmitter<any>();
-  @Input() content:any;
+  @Input() content: any;
   editor;
 
   ngAfterViewInit() {
-    console.log();
-    
+    tinymce.baseURL = window.location.origin + '/assets/tinymce';
     tinymce.init({
-        skin_url: '../../../../assets/skins/lightgray',
+        skin_url: window.location.origin + '/assets/tinymce/skins/lightgray/',
         selector: '.tinymce',
         height: 500,
         theme: 'modern',
@@ -49,8 +46,8 @@ export class TinymceComponent implements AfterViewInit, OnDestroy {
             this.onEditorKeyup.emit(content);
           });
         },
-        file_browser_callback: (field_name, url, type, win)=>{
-          window.onmessage = (event)=>{
+        file_browser_callback: (field_name, url, type, win) => {
+          window.onmessage = (event) => {
             var evt = evt || window.event;
             win.document.getElementById(field_name).value = evt.data;
             tinymce.activeEditor.windowManager.close();
@@ -60,7 +57,7 @@ export class TinymceComponent implements AfterViewInit, OnDestroy {
             title : 'Image Manager',
             width : 520,
             height : 400,
-            url : environment.backendUrl + 'filemanager/',
+            url : environment.imageManager,
           },
           {
             window : win,

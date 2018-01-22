@@ -28,7 +28,8 @@ export class AdCategoriesComponent implements OnInit {
   ngOnInit() {
     this.categoryForm = this.fs.group([
         {key: 'id', defaultValue: '' },
-        {key: 'category', defaultValue: '', validators: [ValidatorsService.required(), ValidatorsService.minLength(3)] }
+        {key: 'category', defaultValue: '', validators: [ValidatorsService.required(), ValidatorsService.minLength(3)] },
+        {key: 'date', defaultValue: this.funs.dateAs() }
     ]);
     const GraphQL_getCategories = {
       query: `
@@ -57,15 +58,18 @@ export class AdCategoriesComponent implements OnInit {
     this.submitted = true;
     var GraphQL_mutateCategory;
     if (!isValid) return false;
-    if (this.submitType == 'Add') {
+    if (this.submitType === 'Add') {
         GraphQL_mutateCategory = {
         query: `
           mutation {
-            addCategory(category: ${newCategory.categories}, token: ${this.funs.getToken()}){
+            addCategory(category: "${newCategory.category}", date: "${newCategory.date}", token: "${this.funs.getToken()}"){
               id,
               category,
               date,
-              ack
+              ack {
+                ok,
+                message
+              }
             }
           }
         `
@@ -74,11 +78,14 @@ export class AdCategoriesComponent implements OnInit {
           GraphQL_mutateCategory = {
         query: `
           mutation {
-            addCategory(category: ${newCategory.categories}, token: ${this.funs.getToken()}){
+            updateCategory(id: ${newCategory.id}, category: "${newCategory.category}", token: "${this.funs.getToken()}" ){
               id,
               category,
               date,
-              ack
+              ack {
+                ok,
+                message
+              }
             }
           }
         `
@@ -90,8 +97,14 @@ export class AdCategoriesComponent implements OnInit {
         if ( this.funs.hasError(respond) ) {
           return;
         }
-        this.categories.push(respond.data.addCategory);
-        this.funs.showSuccessNote('New category successfully added');
+        if (this.submitType === 'Add') {
+          this.categories.push(respond.data.addCategory);
+          this.funs.showSuccessNote('New category successfully added');
+        } else {
+          this.categories[this.index] = respond.data.updateCategory;
+          this.funs.showSuccessNote('Category successfully updated');
+        }
+        this.cancel();
       },
       err => {
         this.funs.showErrorNote(err.json().errors[0]);
@@ -101,13 +114,16 @@ export class AdCategoriesComponent implements OnInit {
     const GrpahQL_deleteCategory = {
       query: `
         mutation {
-          deleteCategory(id: ${id}) {
-            ack
+          deleteCategory(id: ${id}, token: "${this.funs.getToken()}") {
+            ack {
+              ok,
+              message
+            }
           }
         }
       `
     };
-    this.req.get(GrpahQL_deleteCategory).subscribe(
+    this.req.post(GrpahQL_deleteCategory).subscribe(
       res => {
         const respond = res.json();
         if ( this.funs.hasError(respond) ) {

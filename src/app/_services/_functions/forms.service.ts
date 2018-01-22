@@ -55,6 +55,8 @@ export class FormsService {
     for (let field in formGroup.controls) {
       formGroup.controls[field].patchValue('');
     }
+    formGroup.markAsPristine();
+    formGroup.markAsUntouched();
     return formGroup;
   }
   addField(myForm: FormGroup, newName: string, object: any): any {

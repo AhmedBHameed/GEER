@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../../_services/requests.service';
 import { GlobalService } from '../../_services/global.service';
 
-import { FunctionsService } from '../../_services/_functions/functions.service';
+import { environment } from '../../../environments/environment';
 import { AuthService } from '../../_services/auth.service';
 
 // import { ApolloClient } from '../../_client/client';
@@ -71,6 +71,7 @@ export class IndexComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.gs.backendUrl = environment.backendUrl;
     // this.apollo.init().watchQuery<any>({query: getSettings}).valueChanges.subscribe(({data}) => {
     //     this.footerHeaderData = data.getSettings;
     //     this.reqIsComplete = true;
@@ -99,8 +100,8 @@ export class IndexComponent implements OnInit {
     return false;
   }
   checkCradentials(): boolean {
-    let token = this.auth.getCashedOf('token');
-    if (typeof token != 'string') return false;
-    return (token.split('.').length === 3) ? true : false; 
+    let geertoken = this.auth.getCashedOf('geertoken');
+    if (typeof geertoken != 'string') return false;
+    return (geertoken.split('.').length === 3) ? true : false; 
   }
 }

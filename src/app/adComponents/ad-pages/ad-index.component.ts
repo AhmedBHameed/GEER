@@ -48,6 +48,7 @@ export class AdIndexComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.gs.backendUrl = this.funs.url;
           // <li><a [routerLink]="['', 'admin']"><i class="fa fa-tachometer" aria-hidden="true"></i> Control Panel</a></li>
           // <li><a [routerLink]="['', 'admin', 'settings']"><i class="fa fa-cogs" aria-hidden="true"></i> Settings</a></li>
           // <li><a [routerLink]="['', 'admin', 'categories']"><i class="fa fa-list-alt" aria-hidden="true"></i> Categories</a></li>
@@ -118,7 +119,7 @@ export class AdIndexComponent implements OnInit {
   }
 
   isAdmin(): boolean {
-      const token = this.auth.getCashedOf('token');
+      const token = this.auth.getCashedOf('geertoken');
       if (!token) {
           return false;
       }

@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'http://localhost:5000/'
+  backendUrl: 'http://localhost:5000/',
+  imageManager: 'http://localhost:5000/filemanager/'
 };
