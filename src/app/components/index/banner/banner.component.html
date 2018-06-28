@@ -43,13 +43,13 @@
             </div>
           </div>
           <div class="col-md-10">
-            <h1 class="h2"><strong>{{config.settings.title}}</strong></h1>
-            <h3>{{config.settings.meta_description}}</h3>
+            <h1 class="h2"><strong *ngIf="settings.title">{{settings.title}}</strong></h1>
+            <h3>{{settings.meta_description}}</h3>
             <p class="lead typing"></p>
           </div>
         </div>
       </div>
-      <img src="{{config.backendUrl}}{{config.settings.banner_img}}">
+      <img *ngIf="settings.banner_img" src="{{baseUrl}}{{settings.banner_img}}">
     </div>
 
   </div>

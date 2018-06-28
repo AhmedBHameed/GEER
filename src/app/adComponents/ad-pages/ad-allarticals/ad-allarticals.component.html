@@ -1,4 +1,4 @@
-<div class="panel panel-info">
+<div class="panel panel-info" *ngIf="isDataLoaded">
   <div class="panel-heading"><b>All categories</b></div>
   <div class="panel-body">
     <!-- <div class="col-xs-12"> -->
@@ -16,32 +16,27 @@
         </thead>
         <tbody class="post-body">
           <tr *ngFor="let artical of articals | paginate: opt; let i = index">
-            <th>{{i}}</th>
-            <th><img style="width: 80px; border-radius: 10px;" class="img-thumbnail" alt="test2" src="{{url}}{{artical.po_image}}"></th>
-            <th>{{artical.po_title | trim: '10'}}</th>
-            <th>{{artical.ca_category}}</th>
-            <th>{{artical.us_username}}</th>
-            <th>{{artical.po_post_date}}</th>
-            <th>
-              <div *ngIf="artical.po_status == 'published'">
-                <a type="button" (click)="publish($event, artical.po_status, artical.po_post_id, i)" style="display: block" class="btn btn-success">{{artical.po_status}}</a>
-              </div>
-              <div *ngIf="artical.po_status == 'dreft'">
-                <a type="button" (click)="publish($event, artical.po_status, artical.po_post_id, i)" style="display: block" class="btn btn-info">{{artical.po_status}}</a>
-              </div>
+            <td>{{i + 1}}</td>
+            <td><img style="width: 80px; border-radius: 10px;" class="img-thumbnail" alt="test2" src="{{artical.image ? backendUrl + artical.image : defaultImg}}"></td>
+            <td>{{artical.title}}</td>
+            <td>{{artical.category_name}}</td>
+            <td>{{artical.author_name}}</td>
+            <td>{{artical.date | date: 'dd-MMM-yyyy'}}</td>
+            <td>
+              <a type="button" (click)="changeArticalStatus($event, artical, i)" style="display: block" [class]="artical.status == 'published' ? 'btn btn-success' : 'btn btn-info'">{{artical.status}}</a>
+              
               <a type="button" href="../post.php?cat=7&amp;id=11" style="display: block" class="btn btn-primary" target="_blank">View</a>
-              <a type="button" href="posts.php?page=1&amp;delete=11" style="display: block" class="btn btn-danger">Delete</a>
-              <a type="button" (click)="edite($event, artical, opt.currentPage)" style="display: block" class="btn btn-warning">Edite</a>
-            </th>
+              <a type="button" (click)="editeArticalIndex(i)" style="display: block" class="btn btn-warning">Edite</a>
+              <a type="button" (click)="deleteArticalIndex(i)" style="display: block" class="btn btn-danger">Delete</a>
+            </td>
           </tr>
         </tbody>
       </table>
     <!-- </div> -->
 
     <div class="pagination">
-        <app-pagination [option]="opt" (onPageClicked)="clickedPage($event)" ></app-pagination> 
+        <pagination-controls (pageChange)="goTo($event)" ></pagination-controls> 
     </div>
 
   </div>
 </div>
-

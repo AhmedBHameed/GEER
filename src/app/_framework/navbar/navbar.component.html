@@ -3,13 +3,13 @@
         <nav class="navigation">
             <div class="nav-brand-title">
                 <div class="content-center">
-                    <div class="brand">
-                        <a [routerLink]="['']">
-                            <img alt="Brand" src="{{config.backendUrl}}{{config.settings.logo}}">
+                    <div class="brand" *ngIf="sharedData.settings">
+                        <a [routerLink]="['/']">
+                            <img alt="Brand" src="{{baseUrl}}{{sharedData.settings.logo ? sharedData.settings.logo : ''}}">
                         </a>
                     </div>
-                    <div class="caption">
-                        <a [routerLink]="['']">{{config.settings.title}}</a>
+                    <div class="caption" *ngIf="sharedData.settings">
+                        <a [routerLink]="['/']">{{sharedData.settings.title}}</a>
                     </div>
                 </div>
             </div>
@@ -19,9 +19,9 @@
                         <i class="fa fa-bars" aria-hidden="true"></i>
                     </a>
                 </div>
-                <div class="welcome">
-                    <span>Welcome&nbsp;,&nbsp;</span><span class="caption">{{config.username}}</span>
-                    <span *ngIf="config.adminNavbarActive">
+                <div class="welcome" *ngIf="sharedData.settings && sharedData.userData.username">
+                    <span>Welcome&nbsp;,&nbsp;</span><span class="caption">{{sharedData.userData.username}}</span>
+                    <span *ngIf="sharedData.isAdmin && isAdminNav">
                       <div class="triangle"></div>
                       <span>&nbsp;SESSION TIME:&nbsp;</span>
                       <span class="caption">{{STO}}</span>
@@ -31,15 +31,16 @@
             </div>
             <div class="fixed-menu">
                 <h3>Navigation</h3>
-                <ul *ngIf="!config.adminNavbarActive">
-                    <li><a [routerLink]="['']">Home</a></li>
+                <!-- User navbar -->
+                <ul *ngIf="!isAdminNav">
+                    <li><a [routerLink]="['/']">Home</a></li>
                     <li class="dropdown">
                         <a href="#">
                             <span class="triangle">Categories</span>
                         </a>
                     </li>
                     <ul class="menu-list">
-                        <li *ngFor="let cat of navigation"><a [routerLink]="cat.routerLink.split(',')"> {{cat.caption}}</a></li>
+                        <li *ngFor="let cat of sharedData.navigationLinks"><a [routerLink]="cat.routerLink.split(',')"> {{cat.caption}}</a></li>
                     </ul>
                     <li><a href="#">About Us</a></li>
                     <li class="dropdown">
@@ -48,24 +49,25 @@
                         </a>
                     </li>
                     <ul class="menu-list">
-                        <li><a *ngIf="!isAdmin" [routerLink]="['','signin']">Sign in</a></li>
-                        <li><a *ngIf="!isAdmin" [routerLink]="['','login']">Log in</a></li>
-                        <li><a *ngIf="isAdmin" [routerLink]="['','admin']">Administrator</a></li>
-                        <li><a *ngIf="isAdmin" (click)="logout($event)">Log out</a></li>
+                        <li><a *ngIf="!sharedData.isAdmin" [routerLink]="['/','signin']">Sign in</a></li>
+                        <li><a *ngIf="!sharedData.isAdmin" [routerLink]="['/','login']">Log in</a></li>
+                        <li><a *ngIf="sharedData.isAdmin" [routerLink]="['/','admin']">Administrator</a></li>
+                        <li><a *ngIf="sharedData.isAdmin" href="#" (click)="logout()">Log out</a></li>
                     </ul>
                 </ul>
-                <ul *ngIf="config.adminNavbarActive">
-                    <li *ngFor="let cat of navigation"><a [routerLink]="cat.routerLink.split(',')"><i class="{{cat.fontawesome}}" aria-hidden="true"></i> {{cat.caption}}</a></li>
+                <!-- Admin navbar -->
+                <ul *ngIf="isAdminNav">
+                    <li *ngFor="let cat of navigationLinks"><a [routerLink]="cat.routerLink.split(',')"><i class="{{cat.fontawesome}}" aria-hidden="true"></i> {{cat.caption}}</a></li>
                     <li class="dropdown">
                         <a href="#">
                             <span class="triangle">Menu</span>
                         </a>
                     </li>
                     <ul class="menu-list">
-                        <li><a *ngIf="!isAdmin" [routerLink]="['','signin']">Sign in</a></li>
-                        <li><a *ngIf="!isAdmin" [routerLink]="['','login']">Log in</a></li>
-                        <li><a *ngIf="isAdmin" [routerLink]="['','admin']">Administrator</a></li>
-                        <li><a *ngIf="isAdmin" href="#" (click)="logout($event)">Log out</a></li>
+                        <li><a *ngIf="!sharedData.isAdmin" [routerLink]="['/','signin']">Sign in</a></li>
+                        <li><a *ngIf="!sharedData.isAdmin" [routerLink]="['/','login']">Log in</a></li>
+                        <li><a *ngIf="sharedData.isAdmin" [routerLink]="['/','admin']">Administrator</a></li>
+                        <li><a *ngIf="sharedData.isAdmin" href="#" (click)="logout()">Log out</a></li>
                     </ul>
                 </ul>
             </div>

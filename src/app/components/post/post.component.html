@@ -1,0 +1,27 @@
+<app-breadcrumb></app-breadcrumb>
+<app-title [title]="artical.title"></app-title>
+<div class="articalbodymap col-xs-12">
+   <section class="articalbodymap bodyOfSection">
+      <div class="articalbodymap col-xs-12">
+         <img src="{{artical.image ? backendUrl + artical.image : defaultImg}}" width="100%" />
+
+         <div class="item-bg-color padding-all">
+            <i class="fa fa-user"></i> by:
+            <a href="#">
+               <strong>{{artical.author_name}}</strong>
+            </a>
+
+            <div class="pull-right">
+               <i class="fa fa-clock-o"></i> at:
+               <a class="#">
+                  <strong>{{artical.date | date: 'dd-MMM-yyyy'}}</strong>
+               </a>
+            </div>
+         </div>
+         <div class="articalbody padding-top" [innerHTML]="artical.artical"></div>
+      </div>
+      <div class="clearfix"></div>
+   </section>
+</div>
+<!-- <app-comments></app-comments> -->
+<div class="clearfix"></div>

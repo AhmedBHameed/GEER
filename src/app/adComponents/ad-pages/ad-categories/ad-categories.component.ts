@@ -1,6 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { FormsService, ValidatorsService } from '../../../_services/_functions/forms';
+
+// Services
+import { FormsService, ValidatorsService } from '../../../_services/_forms';
+import { BaseApis } from '../../../_services/base-apis';
+
+// Graphql queries
+import { gqlCategories } from '../../../_gql_queries/index';
+
 import { FunctionsService } from '../../../_services/_functions/functions.service';
 import { RequestsService } from '../../../_services/requests.service';
 import { GlobalService } from '../../../_services/global.service';
@@ -8,61 +15,49 @@ import { GlobalService } from '../../../_services/global.service';
 @Component({
   selector: 'app-ad-categories',
   templateUrl: './ad-categories.component.html',
-  styleUrls: ['./ad-categories.component.css'],
-  providers: [ FormsService, RequestsService ]
+  styleUrls: ['./ad-categories.component.scss'],
+  providers: [ FormsService ]
 })
-export class AdCategoriesComponent implements OnInit {
-  categories      : any;
+export class AdCategoriesComponent extends BaseApis implements OnInit {
   categoryForm    : FormGroup;
-  showForm        : boolean = false;
   submitType      : string = "Add";
   index           : number;
   submitted       : boolean = false;
-  constructor(
-    public funs: FunctionsService,
-    private fs: FormsService,
-    private req: RequestsService,
-    public gs: GlobalService  
-  ) { }
+  constructor(protected injector: Injector, private fs: FormsService) {
+    super(injector);
+  }
 
   ngOnInit() {
     this.categoryForm = this.fs.group([
         {key: 'id', defaultValue: '' },
         {key: 'category', defaultValue: '', validators: [ValidatorsService.required(), ValidatorsService.minLength(3)] },
-        {key: 'date', defaultValue: this.funs.dateAs() }
+        {key: 'date', defaultValue: ''}
     ]);
-    const GraphQL_getCategories = {
-      query: `
-        {
-          getCategories {
-            id,
-            category,
-            date
+
+    if (!this.sharedData.categories.length) {
+      this.httpService.post(gqlCategories).subscribe(
+        (res: any) => {
+          res = res.json();
+          if (this.httpService.hasError(res)) {
+            this.notiService.message(res);
+            return false;
           }
-        }
-    `};
-    this.req.get(GraphQL_getCategories).subscribe(
-      res => {
-        const respond = res.json();
-        if ( this.funs.hasError(respond) ) {
-          return;
-        }
-        this.categories = respond.data.getCategories;
-        this.showForm = true;
-      },
-      err => {
-        this.funs.showErrorNote(err.json().errors[0]);
-    });
+          this.sharedData.categories = res.data.getCategories;
+        },
+        (err: any) => {
+          console.error(err.json().errors[0]);
+      });
+    }
   }
   addCategory(newCategory: any, isValid) {
     this.submitted = true;
-    var GraphQL_mutateCategory;
+    let gqlAddCategory;
     if (!isValid) return false;
     if (this.submitType === 'Add') {
-        GraphQL_mutateCategory = {
+      gqlAddCategory = {
         query: `
           mutation {
-            addCategory(category: "${newCategory.category}", date: "${newCategory.date}", token: "${this.funs.getToken()}"){
+            addCategory(category: "${newCategory.category}", token: "${this.authService.getToken()}"){
               id,
               category,
               date,
@@ -75,10 +70,10 @@ export class AdCategoriesComponent implements OnInit {
         `
       };
     } else {
-          GraphQL_mutateCategory = {
+      gqlAddCategory = {
         query: `
           mutation {
-            updateCategory(id: ${newCategory.id}, category: "${newCategory.category}", token: "${this.funs.getToken()}" ){
+            updateCategory(id: ${newCategory.id}, category: "${newCategory.category}", token: "${this.authService.getToken()}" ){
               id,
               category,
               date,
@@ -91,30 +86,32 @@ export class AdCategoriesComponent implements OnInit {
         `
       };
     }
-    this.req.post(GraphQL_mutateCategory).subscribe(
-      res => {
-        const respond = res.json();
-        if ( this.funs.hasError(respond) ) {
-          return;
+    this.httpService.post(gqlAddCategory).subscribe(
+      (res: any) => {
+        res = res.json();
+        if (this.httpService.hasError(res)) {
+          this.notiService.message(res);
+          return false;
         }
         if (this.submitType === 'Add') {
-          this.categories.push(respond.data.addCategory);
-          this.funs.showSuccessNote('New category successfully added');
+          this.sharedData.categories.push(res.data.addCategory);
+          this.notiService.message('New category successfully added');
         } else {
-          this.categories[this.index] = respond.data.updateCategory;
-          this.funs.showSuccessNote('Category successfully updated');
+          this.sharedData.categories[this.index] = res.data.updateCategory;
+          this.notiService.message('Category successfully updated');
         }
         this.cancel();
       },
-      err => {
-        this.funs.showErrorNote(err.json().errors[0]);
+      (err: any) => {
+        console.error(err.json().errors[0]);
     });
   }
+
   delete(id, index) {
-    const GrpahQL_deleteCategory = {
+    const gqlDeleteCategory = {
       query: `
         mutation {
-          deleteCategory(id: ${id}, token: "${this.funs.getToken()}") {
+          deleteCategory(id: ${id}, token: "${this.authService.getToken()}") {
             ack {
               ok,
               message
@@ -123,19 +120,21 @@ export class AdCategoriesComponent implements OnInit {
         }
       `
     };
-    this.req.post(GrpahQL_deleteCategory).subscribe(
-      res => {
-        const respond = res.json();
-        if ( this.funs.hasError(respond) ) {
-          return;
+    this.httpService.post(gqlDeleteCategory).subscribe(
+      (res: any) => {
+        res = res.json();
+        if (this.httpService.hasError(res)) {
+          this.notiService.message(res);
+          return false;
         }
-        this.funs.showSuccessNote(this.categories[index].category + ' category successfully deleted');
-        this.categories = this.fs.removeRow(this.categories, index);
+        this.notiService.message(this.sharedData.categories[index].category + ' category successfully deleted');
+        this.sharedData.categories = this.fs.removeRow(this.sharedData.categories, index);
       },
-      err => {
-        this.funs.showErrorNote(err.json().errors[0]);
+      (err: any) => {
+        console.error(err.json().errors[0]);
     });
   }
+
   update(data, index) {
     this.index = index;
     this.submitType = 'Update';

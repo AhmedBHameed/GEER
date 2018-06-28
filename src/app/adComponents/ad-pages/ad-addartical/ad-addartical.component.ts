@@ -1,134 +1,144 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Injector, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
-import { FunctionsService } from '../../../_services/_functions/functions.service';
-import { RequestsService } from '../../../_services/requests.service';
+// Services
+import { BaseApis } from '../../../_services/base-apis';
 import { FormsService, ValidatorsService } from '../../../_services/_functions/forms';
+import { MultimediaService } from '../../../_services';
 
 declare var $: any, tinymce: any;
 @Component({
-  selector: 'app-ad-addartical',
-  templateUrl: './ad-addartical.component.html',
-  styleUrls: ['./ad-addartical.component.css'],
-  providers: [ FormsService ]
+   selector: 'app-ad-addartical',
+   templateUrl: './ad-addartical.component.html',
+   styleUrls: ['./ad-addartical.component.css'],
+   providers: [FormsService, MultimediaService]
 })
-export class AdAddarticalComponent implements OnInit {
-  articalForm: FormGroup;
-  post_body: any = null;
-  categories        : any;
-  defaultImg: string = './assets/img/no-image-available.jpg';
-  submitted         : boolean= false;
+export class AdAddarticalComponent extends BaseApis implements OnInit {
+   @ViewChild('articalImage') fileInputEl: ElementRef;
+   categories: any;
+   articalForm: FormGroup;
+   defaultImg: string = './assets/img/no-image-available.jpg';
+   backendUrl: string = environment.backendUrl;
+   submitted: boolean = false;
+   isUpdateMood: boolean = false;
+   constructor(
+      protected injector: Injector,
+      private fs: FormsService,
+      private ar: ActivatedRoute,
+      private multi: MultimediaService) {
+         super(injector);
+   }
 
-  constructor(
-    private router: Router,
-    private req: RequestsService,
-    private fs: FormsService,
-    private funs: FunctionsService ) {  }
+   ngOnInit() {
+      this.articalForm = this.fs.group([
+         { key: 'id', defaultValue: ''},
+         { key: 'title', defaultValue: '', validators: [ValidatorsService.required(), ValidatorsService.minLength(3)] },
+         { key: 'category', defaultValue: '', validators: [ValidatorsService.required()] },
+         { key: 'status', defaultValue: 'dreft' },
+         { key: 'artical', defaultValue: '' },
+         { key: 'author', defaultValue: '' },
+         { key: 'image', defaultValue: '' }
+      ]);
 
-  ngOnInit() {
-    const GraphQL_getCategories = {
-      query: `
-        {
-          getCategories {
-            id,
-            category,
-            date
-          }
-        }
-    `};
-    this.req.get(GraphQL_getCategories).subscribe(
-      res => {
-        const respond = res.json();
-        if ( this.funs.hasError(respond) ) {
-          return;
-        }
-        this.categories = respond.data.getCategories;
-        // this.showForm = true;
-      },
-      err => {
-        this.funs.showErrorNote(err.json().errors[0]);
-    });
-    this.articalForm = this.fs.group([
-        {key: 'title', defaultValue: '', validators: [ValidatorsService.required(), ValidatorsService.minLength(3)] },
-        {key: 'category', defaultValue: '', validators: [ValidatorsService.required()] },
-        {key: 'status', defaultValue: 'dreft'},
-        {key: 'image', defaultValue: ''},
-        {key: 'post', defaultValue: '', validators: [ValidatorsService.required()]}
-    ]);
-  
-    //   if(this.ads.globalVariable != null){
-    //     this.post_body = this.ads.globalVariable;
-    //     this.modeType = 'Save';
-    //     setTimeout(()=>{
-    //       $('img.articalImage').attr('src', this.fn.url+this.ads.globalVariable.po_image).hide().fadeIn(300);
-    //     }, 1000);
-    //     console.log(this.ads.globalVariable);
-    //     this.articalForm = this.fs.set(this.articalForm, [
-    //       {"key":"po_title", "defaultValue":this.ads.globalVariable.po_title },
-    //       {"key":"po_category", "defaultValue":this.ads.globalVariable.po_category},
-    //       {"key":"po_status", "defaultValue":this.ads.globalVariable.po_status},
-    //       {"key":"po_image", "defaultValue":this.ads.globalVariable.po_image},
-    //       {"key":"po_post", "defaultValue":this.ads.globalVariable.po_post}
-    //     ]);
-    //   }else{
-    //     setTimeout(()=>{
-    //       $('img.articalImage').attr('src', '../../../assets/img/default/no-image-available.jpg').hide().fadeIn(300);
-    //     }, 1000);
-    //   }
-  
-  }
-  keyupHandlerFunction(post) {
-    this.post_body = post;
-    this.articalForm = this.fs.update(this.articalForm, [{
-      key: 'post',
-      defaultValue: post
-    }]);
-  }
+      this.isUpdateMood = this.ar.snapshot.params.type == 'update' && this.sharedData.updateArtical.articalObj;
+      if (this.isUpdateMood) {
+         this.articalForm = this.fs.update(this.articalForm, this.sharedData.updateArtical.articalObj);
+      } else {
+         this.isUpdateMood = false;
+         this.authService.redirectTo(['admin', 'artical', 'add']);
+      }
+   }
 
-  reset() {
-    this.articalForm = this.fs.reset(this.articalForm);
-  }
-  send(data: any, isValid: boolean) {
-    this.submitted = true;
-    if (isValid) {
-      console.log(this.articalForm.value);
-  //     if(this.modeType == 'Save'){
-  //       data["po_post_id"] = this.ads.globalVariable.po_post_id;
-  //       this.ads.modifyArtical(data).subscribe(
-  //         (res) => {
-  //           this.fn.notify({
-  //             type: 'success',
-  //             icon: 'fa fa-exclamation-triangle',
-  //             title: 'Error',
-  //             message: res.json().data.message
-  //           });
-  //           this.reset();
-  //         },
-  //         (err) => {
-  //           console.log(err.json());
-  //         });
-  //     }else{
-  //       this.ads.addArtical(data).subscribe(
-  //         (res) => {
-  //           this.fn.notify({
-  //             type: 'success',
-  //             icon: 'fa fa-exclamation-triangle',
-  //             title: 'Error',
-  //             message: res.json().data.message
-  //           });
-  //         },
-  //         (err) => {
-  //           console.log(err.json());
-  //         });
-  //     }
-    }
-  //   return;
-  }
-  chooseArticalImage(e) {
-    this.fs.update(this.articalForm, {image: e.target.files[0]} );
-    this.funs.chooseImage(e, this.defaultImg).then((data) => {
-      $('img.articalImage').attr('src', data).hide().fadeIn(500);
-    });
-  }
+   // Empty the input field in case the user upload the same image (preventing halt issue of the same image)
+   reset() {
+      this.articalForm = this.fs.reset(this.articalForm);
+      this.fileInputEl.nativeElement.value = '';
+      if ( !/safari/i.test(navigator.userAgent) ) {
+         this.fileInputEl.nativeElement.type = '';
+         this.fileInputEl.nativeElement.type = 'file';
+      }
+   }
+
+   send(data: any, isValid: boolean) {
+      this.submitted = true;
+      let gqlAddUpdateArtical: any;
+      if (isValid) {
+         if (this.isUpdateMood) {
+            gqlAddUpdateArtical = {
+               variables: null,
+               query: `
+                  mutation {
+                     updateArtical(
+                        id: ${data.id},
+                        token: "${this.authService.getToken()}",
+                        title: "${data.title}",
+                        category: ${+data.category},
+                        status: "${data.status}",
+                        artical: "${data.artical}",
+                        author: ${this.sharedData.userData.id}
+                     ) {
+                        ack {
+                           ok,
+                           message
+                        }
+                     }
+                  }
+               `
+            };
+         } else {
+            gqlAddUpdateArtical = {
+               variables: null,
+               query: `
+                  mutation {
+                  addArtical(
+                     token: "${this.authService.getToken()}",
+                     title: "${data.title}",
+                     category: ${+data.category},
+                     status: "${data.status}",
+                     artical: "${data.artical}",
+                     author: ${this.sharedData.userData.id}
+                  ) {
+                     ack {
+                        ok,
+                        message
+                     }
+                  }
+                  }
+               `
+            };
+         }
+         this.httpService.packBinaryForm(gqlAddUpdateArtical, { image: this.articalForm.value.image }).subscribe(
+            (res: any) => {
+               res = res.json();
+               if (this.httpService.hasError(res)) {
+                  this.notiService.message(res, true);
+                  return;
+               }
+               this.fs.reset(this.articalForm);
+               if (this.isUpdateMood) {
+                  this.notiService.message(res.data.updateArtical.ack.message);
+                  this.authService.redirectTo(['admin', 'allarticals', this.sharedData.updateArtical.onPage]);
+               } else {
+                  this.notiService.message(res.data.addArtical.ack.message);
+                  this.reset();
+               }
+            },
+            (err: any) => {
+               console.error(err.errors[0].message);
+            });
+      }
+   }
+
+   changePic(imgUrl: string) {
+      $('img.articalImage').attr('src', imgUrl).hide().fadeIn(500);
+   }
+
+   chooseArticalImage(e) {
+      this.fs.update(this.articalForm, { image: e.target.files[0] });
+      this.multi.chooseImage(e, this.defaultImg).then((data: string) => {
+         this.changePic(data);
+      });
+   }
 }

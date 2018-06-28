@@ -13,7 +13,6 @@ export class RequestsService {
   }
   binaryRequest(GrqphQLQueryObj: any, objOfBinaries: any) {
     const requestObject: any = new FormData();
-    console.log(this.funs.stringify(GrqphQLQueryObj));
     requestObject.append('queryJsonAsString', this.funs.stringify(GrqphQLQueryObj) );
     // tslint:disable-next-line:forin
     for (let key in objOfBinaries) {

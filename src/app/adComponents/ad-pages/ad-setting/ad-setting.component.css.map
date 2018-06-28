@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAGA,WAAW;EACP,UAAU,EAAE,IAAI;EAChB,kBAAM;IACF,KAAK,EAAE,IAAI;IACX,UAAU,EAPA,OAAO;IAQjB,OAAO,EAAE,GAAG;IACZ,WAAW,EAAE,EAAE;IACf,MAAM,EAAE,cAAc;EAE1B,oBAAQ;IACJ,UAAU,EAZA,OAAO;IAajB,MAAM,EAAE,cAAc;IACtB,WAAW,EAAE,IAAI;IACjB,aAAa,EAAE,IAAI",
-"sources": ["ad-setting.component.scss"],
-"names": [],
-"file": "ad-setting.component.css"
-}

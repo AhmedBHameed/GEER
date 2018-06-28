@@ -6,7 +6,12 @@ export class GlobalService {
   adminNavbarActive: boolean = false;
   settings: any;
   categories: any;
+  user_id: number;
   username: string = 'Guest';
+
+  // object for update artical
+  public updateArticalObject : string = null;
+  
   constructor() { }
 
 }

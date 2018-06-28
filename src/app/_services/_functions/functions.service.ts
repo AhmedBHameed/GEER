@@ -125,7 +125,7 @@ export class FunctionsService {
         type: 'danger',
         icon: 'fa fa-exclamation-triangle',
         title: 'Request Error!!',
-        message: error.message
+        message: error
     });
   }
   showSuccessNote(message) {
@@ -197,8 +197,8 @@ export class FunctionsService {
     }
     return null;
   }
-  dateAs(format: string = 'YYYY-MM-DD') {
-    return moment(new Date()).format(format);
+  dateAs(date: string = null, format: string = 'DD-MMM-YYYY') {
+    return date ? moment(date).format(format) : moment().format(format);
   }
 
   // private makeRequestJsonp(page=null, data=null){ // this is jsonp request

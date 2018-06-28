@@ -2,6 +2,65 @@
 /*--------------------------------------------Title section----------------------*/
 /*--------------------------------------------Pagination Section----------------------*/
 /*--------------------------------------------Pagination Section----------------------*/
+.bootstrap-tagsinput {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  display: inline-block;
+  padding: 4px 6px;
+  color: #555;
+  vertical-align: middle;
+  border-radius: 4px;
+  max-width: 100%;
+  line-height: 22px;
+  width: 100%;
+  cursor: text; }
+
+.bootstrap-tagsinput input {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0 6px;
+  margin: 0;
+  width: auto;
+  max-width: inherit; }
+
+.bootstrap-tagsinput.form-control input::-moz-placeholder {
+  color: #777;
+  opacity: 1; }
+
+.bootstrap-tagsinput.form-control input:-ms-input-placeholder {
+  color: #777; }
+
+.bootstrap-tagsinput.form-control input::-webkit-input-placeholder {
+  color: #777; }
+
+.bootstrap-tagsinput input:focus {
+  border: none;
+  box-shadow: none; }
+
+.bootstrap-tagsinput .tag {
+  margin-right: 2px;
+  color: white;
+  background: #5BC0DE;
+  padding: 2px 5px;
+  border-radius: 2px; }
+
+.bootstrap-tagsinput .tag [data-role="remove"] {
+  margin-left: 8px;
+  cursor: pointer; }
+
+.bootstrap-tagsinput .tag [data-role="remove"]:after {
+  content: "x";
+  padding: 0px 2px; }
+
+.bootstrap-tagsinput .tag [data-role="remove"]:hover {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05); }
+
+.bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
+
 * {
   box-sizing: border-box;
   font-family: 'PT Sans Caption', sans-serif, 'arial', 'Times New Roman'; }
@@ -422,6 +481,12 @@ body {
     background: rgba(35, 38, 78, 0.8); }
   body ::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(35, 38, 78, 0.4); }
+  body .admin-body {
+    margin-top: 70px; }
+  body .table tbody tr td {
+    vertical-align: middle; }
+  body .mce-fullscreen {
+    z-index: 65534; }
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0px; }
@@ -1190,10 +1255,6 @@ ul.ng2-pagination {
       background: white; }
 
 /*--------------------------------------------FrameWork------------------------*/
-.container-floud {
-  padding: 0px 20px; }
-
-/*done*/
 .SectionDivision {
   background: #253752;
   color: white;

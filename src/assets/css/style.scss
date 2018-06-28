@@ -30,12 +30,16 @@ body
     @import '_breadCrumb.scss';
     @import '_newregistration.scss';
     @include scrollStyle($width: 10px, $borderRadius: 5px, $background: rgba(35, 38, 78, 0.8), $inactive: rgba(35, 38, 78, 0.4));
+    .admin-body {
+        margin-top: 70px;
+    }
+    .table tbody tr td {
+        vertical-align: middle;
+    }
+    .mce-fullscreen {
+        z-index: 65534;
+    }
 }
-
-
-
-
-
 
 h1,h2,h3,h4,h5,h6{
     margin: 0px;
@@ -868,8 +872,6 @@ h1,h2,h3,h4,h5,h6{
 
 
 /*--------------------------------------------FrameWork------------------------*/
-    .container-floud { padding: 0px 20px; } /*done*/
-
 
 
     .SectionDivision
@@ -902,7 +904,6 @@ h1,h2,h3,h4,h5,h6{
     {
       color: red;
     }
-
 
     h1,h2,h3,h4,h5,h6 /*done*/
     {

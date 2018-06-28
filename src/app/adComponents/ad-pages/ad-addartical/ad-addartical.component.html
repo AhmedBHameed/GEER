@@ -15,22 +15,22 @@
       <div class="form-group">
         <label for="image" class="col-sm-2 control-label">Artical Image:</label>
         <div class="col-sm-5">
-          <input type="file" name="image" (change)="chooseArticalImage($event)" class="form-control" id="image">
+          <input type="file" name="image" #articalImage (change)="chooseArticalImage($event)" class="form-control" id="image">
         </div>
       </div>
 
       <div class="form-group">
         <label for="artical" class="col-sm-2 control-label">Image:</label>
         <div class="col-sm-5">
-          <img src="{{defaultImg}}" alt="Logo" id="artical" class="img-thumbnail articalImage">
+          <img src="{{articalForm.value.image ? backendUrl + this.articalForm.value.image : defaultImg}}" alt="Logo" id="artical" class="img-thumbnail articalImage">
         </div>
       </div>
 
       <div class="form-group">
         <label for="artical" class="col-sm-2 control-label">Artical:</label>
         <div class="col-sm-8">
-          <tinymce [content]="post_body" (onEditorKeyup)="keyupHandlerFunction($event)"></tinymce>
-          <small [hidden]="!submitted || articalForm.controls.post.valid">Post body is required!</small>
+          <tinymce formControlName="artical"></tinymce>
+          <!-- <small [hidden]="!submitted || articalForm.controls.post.valid">Post body is required!</small> -->
         </div>
       </div>
 
@@ -39,7 +39,7 @@
         <div class="col-sm-5">
           <select name="category" formControlName="category" class="form-control" id="category">
               <option value="">Choose category</option>
-              <option *ngFor="let cat of categories" value="{{cat.id}}">{{cat.category}}</option>
+              <option *ngFor="let cat of sharedData.categories" value="{{cat.id}}">{{cat.category}}</option>
             </select>
           <small [hidden]="!submitted || articalForm.controls.category.valid">Please specify post category!</small>
         </div>

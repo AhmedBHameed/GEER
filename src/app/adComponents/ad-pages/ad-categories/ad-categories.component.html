@@ -3,7 +3,7 @@
     <div class="panel-heading"><b>Adding New Category</b></div>
     <div class="panel-body">
       <div class="col-lg-12">
-        <form *ngIf="showForm" [formGroup]="categoryForm" (ngSubmit)="addCategory(categoryForm.value, categoryForm.valid)" class="form-inline">
+        <form [formGroup]="categoryForm" (ngSubmit)="addCategory(categoryForm.value, categoryForm.valid)" class="form-inline">
           <div class="form-group">
             <div class="col-lg-5 col-md-5">
               <label for="cattitle" class="control-label">Add/Edite Category:</label>
@@ -39,10 +39,10 @@
         </thead>
         <tbody class="cat-body">
 
-          <tr *ngFor="let cat of categories; let i = index">
+          <tr *ngFor="let cat of sharedData.categories; let i = index">
             <th>{{i+1}}</th>
             <th>{{cat.category}}</th>
-            <th>{{cat.date}}</th>
+            <th>{{cat.date | date: 'dd-MMM-yyyy'}}</th>
             <th><a type="button" (click)="delete(cat.id, i)" class="btn btn-danger">Delete</a></th>
             <th><a type="button" (click)="update(cat, i)" class="btn btn-warning">Edite</a></th>
           </tr>

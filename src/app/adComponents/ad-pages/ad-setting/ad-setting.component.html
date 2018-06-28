@@ -63,7 +63,7 @@
               <label for="slide" class="col-sm-2 control-label">Gategory of slides:</label>
               <div class="col-sm-4">
                 <select formControlName="slide_category_id" class="form-control" name="catslide" id="slide">
-                  <option *ngFor="let cat of categories" [value]="cat.id">{{cat.category}}</option>
+                  <option *ngFor="let cat of sharedData.categories" [value]="cat.id">{{cat.category}}</option>
                 </select>
                 <small [hidden]="settingsForm.controls.slide_category_id.valid || (settingsForm.controls.slide_category_id.pristine && !submitted)">Please specify slider category! If there are not category then define them in <a [routerLink]="['','admin','categories']">here</a></small>
               </div>
