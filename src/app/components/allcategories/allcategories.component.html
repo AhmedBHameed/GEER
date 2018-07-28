@@ -1,0 +1,36 @@
+<app-breadcrumb></app-breadcrumb>
+<app-title [title]="title"></app-title>
+  <div class="col-xs-12">
+    <section class="bodyOfSection">
+
+      <div *ngIf="!catArticals.length" class="col-xs-12 text-center">
+        <div class="alert alert-warning" role="alert">{{msg}}</div>
+      </div>
+      <section *ngIf="catArticals.length">
+        <div  class="col-xs-12" *ngFor="let catArtical of catArticals">
+          <div class="cat-post item-bg-color padding-all margin-bottom">
+            <div class="row">
+              <div class="col-md-3">
+                <a class="post-image" [routerLink]="['', 'artical', catArtical.id]">
+                  <img src="{{catArtical.image ? url+catArtical.image : defaultImg}}" class="img-responsive"></a>
+              </div>
+              <div class="col-md-9">
+                <h2 class=""><a [routerLink]="['', 'artical', catArtical.id]">{{catArtical.title}}</a></h2>
+
+                <p class="lead no-vertical-margin margin-top">
+                  {{catArtical.artical | parseUri | trim: 150}}
+                </p>
+                <a [routerLink]="['', 'post', catArtical.id]" class="btn btn-warning btn-sm pull-right">Read more</a>
+
+                <div class="clearfix"></div>
+                <hr class="margin-top">
+                <p><i class="fa fa-user"></i> by: <a href="profile.php?id=16">{{catArtical.author_name}}</a> | <i class="fa fa-clock-o"></i> at:
+                  <a class="#">{{catArtical.date | date: 'dd-MMM-yyyy'}}</a> | <i class="fa fa-comments"></i> Comments: <a class="#">{{'catData.co_comments'}}</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="clearfix"></div>
+    </section>
+  </div>

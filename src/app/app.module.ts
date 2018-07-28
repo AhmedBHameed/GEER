@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
+import { GraphtyModule } from 'graphty';
 
 // Routes of the suite
 import { RoutesModule } from './_routes/routes.module';
@@ -26,8 +27,9 @@ import { FooterComponent } from './_framework/framework.module';
 // Pipes
 import {
   PipesPipe,
-  StriptagsPipe,
-  DateTransformPipe
+  ParseUriPipe,
+  DateTransformPipe,
+  SafeHtmlPipe
 } from './_pipes/pipes.module';
 
 // Import Global service to include all static information for the front-end
@@ -46,8 +48,6 @@ import { LastcommantsComponent } from './components/home/lastcommants/lastcomman
 import { BannerComponent } from './components/index/banner/banner.component';
 import { TitleComponent } from './components/template/title/title.component';
 
-// category folder
-import { CategoryComponent } from './components/index/pages/category/category.component';
 // post folder
 import { PostComponent } from './components/post/post.component';
 // import { CommentsComponent } from './components/index/pages/category/post/comments/comments.component';
@@ -59,7 +59,7 @@ import { LandingpageComponent } from './landingpage/landingpage.component';
 
 import { RegesterComponent } from './components/index/pages/regester/regester.component';
 import { BreadcrumbComponent } from './components/template/breadcrumb/breadcrumb.component';
-import { AllcategoriesComponent } from './components/index/pages/category/allcategories/allcategories.component';
+import { AllcategoriesComponent } from './components/allcategories/allcategories.component';
 // import { DisqusModule } from 'ngx-disqus';
 
 // login folder
@@ -69,7 +69,6 @@ import { LogginComponent } from './components/loggin/loggin.component';
   declarations: [
     AppComponent,
     HomeComponent,
-    CategoryComponent,
     ProfileComponent,
     LandingpageComponent,
     BannerComponent,
@@ -84,8 +83,9 @@ import { LogginComponent } from './components/loggin/loggin.component';
     BreadcrumbComponent,
     AllcategoriesComponent,
     PipesPipe,
-    StriptagsPipe,
-    DateTransformPipe
+    ParseUriPipe,
+    DateTransformPipe,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,
@@ -96,7 +96,8 @@ import { LogginComponent } from './components/loggin/loggin.component';
     RoutesModule,
     JsonpModule,
     HttpClientModule,
-    AdminModule
+    AdminModule,
+    GraphtyModule
   ],
   providers: [
     HttpService,
@@ -104,7 +105,7 @@ import { LogginComponent } from './components/loggin/loggin.component';
     NotificationsService,
     AuthService,
     FunctionsService,
-    GlobalService
+    GlobalService,
   ],
   bootstrap: [AppComponent]
 })

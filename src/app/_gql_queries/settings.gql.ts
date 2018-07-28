@@ -14,7 +14,7 @@ export const gqlSettings = {
         facebook,
         googleplus,
         youtube,
-        twitter,
+        twitter
       }
     }
   `

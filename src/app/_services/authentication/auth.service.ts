@@ -2,13 +2,19 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpService } from '../http/http.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { GraphtyService, GqlQueryInterface } from 'graphty';
+import { pluck } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private notify: NotificationsService, private http: HttpService, private router: Router) { }
+  constructor(
+    private notify: NotificationsService,
+    private http: HttpService,
+    private graf: GraphtyService,
+    private router: Router) { }
 
   cash(key: string, data: any, isPermanent: boolean = false) {
     if (isPermanent) {
@@ -32,22 +38,16 @@ export class AuthService {
       this.redirectTo(['login']);
     }
   }
+
   checkToken() {
-    let gql_checkToken = {
-      query: `
-          {
-            checkToken(jwt: "${this.getToken()}"){
-              isActive,
-              username,
-              id,
-              ack{
-                ok,
-                message
-              }
-            }
-          }
-      `};
-    return this.http.post(gql_checkToken);
+    let checkToken: GqlQueryInterface = this.graf.stagnation({
+      fun: {
+        name: 'checkToken',
+        args: {jwt: this.getToken()}
+      },
+      ret: ['isActive','username','id','ack{ok,message}']
+    })
+    return this.http.post(checkToken).pipe(pluck('checkToken'));
   }
   clearCash() {
     window.localStorage.clear();

@@ -57,7 +57,7 @@ export class NotificationsService {
       });
   }
   public message(message: any, isError: boolean = false) {
-    message = typeof message == 'object' ? message.errors[0].message : message;
+    message = typeof message == 'object' ? message.json().errors[0].message : message;
     this.push({
         type: isError ? 'danger' : 'success',
         icon: isError ? 'fa fa-exclamation-triangle' : 'fa fa-flag',

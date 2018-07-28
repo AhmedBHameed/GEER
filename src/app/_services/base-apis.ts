@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 
 // Services
-import { HttpService, NotificationsService, SharedDataService, AuthService } from '../_services';
+import { HttpService, NotificationsService, SharedDataService, AuthService } from '.';
 
 @Injectable()
 export abstract class BaseApis {

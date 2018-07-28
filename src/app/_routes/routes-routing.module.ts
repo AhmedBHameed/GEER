@@ -3,8 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 // Components
 import { HomeComponent } from '../components/home/home.component';
-import { CategoryComponent } from '../components/index/pages/category/category.component';
-import { AllcategoriesComponent } from '../components/index/pages/category/allcategories/allcategories.component';
+import { AllcategoriesComponent } from '../components/allcategories/allcategories.component';
 import { PostComponent } from '../components/post/post.component';
 import { LogginComponent } from '../components/loggin/loggin.component';
 import { IndexComponent } from '../components/index.component';
@@ -24,8 +23,7 @@ const routes: Routes = [
   {path: 'landingpage', component: LandingpageComponent },
   {path: '', component: IndexComponent, data: { breadcrumb: 'Home'}, children: [
         {path: '', component: HomeComponent, data: { title: 'Home Page' }},
-        {path: 'category/:cat', component: CategoryComponent, data: { breadcrumb: 'Categories'}, children: [
-          {path: '', component: AllcategoriesComponent, data: { title: 'Categoies Page' }},
+        {path: 'category/:cat', component: AllcategoriesComponent, data: { breadcrumb: 'Categories'}, children: [
           {path: 'artical/:id', component: PostComponent, data: { breadcrumb: 'Post'}}
         ]},
         {path: 'artical/:id', component: PostComponent, data: { breadcrumb: 'Hot Posts'}},

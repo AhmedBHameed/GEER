@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { GqlQueryInterface, GraphtyService } from 'graphty';
 
 // Services
 import { HttpService, NotificationsService } from '../../_services';
@@ -8,8 +9,6 @@ import { HttpService, NotificationsService } from '../../_services';
 // Environments
 import { environment } from '../../../environments/environment';
 
-// Grqphql queries
-import { gqlArticals } from '../../_gql_queries';
 
 @Component({
    selector: 'app-home',
@@ -27,23 +26,27 @@ export class HomeComponent implements OnInit {
       private title: Title,
       private router: ActivatedRoute,
       private notify: NotificationsService,
+      private graphty: GraphtyService,
       private http: HttpService) { }
 
    ngOnInit() {
       this.title.setTitle(this.router.snapshot.data['title']);
+      let gqlArticals: GqlQueryInterface = this.graphty.stagnation({
+         fun: {
+            name: 'getArticals',
+            args: { limit: 15 }
+         },
+         ret: ['id', 'title', 'artical', 'category', 'category_name', 'image', 'author', 'author_name', 'status', 'date', 'rows']
+      });
+
       this.http.post(gqlArticals).subscribe(
          (res: any) => {
-            res = res.json();
-            if (this.http.hasError(res)) {
-               this.notify.message(res);
-               return false;
-            }
-            this.newArticals = res.data.getArticals;
+            this.newArticals = res.getArticals;
             this.isDataLoaded = true;
          },
          (err: any) => {
-            console.error(err.json().errors[0].message);
-      });
+            this.notify.message(err, true);
+         });
    }
 
 }

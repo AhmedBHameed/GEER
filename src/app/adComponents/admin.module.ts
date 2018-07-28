@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { GraphtyModule } from '../_services/_graphty';
 
 // Components
 import { AdIndexComponent } from './ad-pages/ad-index.component';
@@ -38,7 +39,8 @@ import { PaginationComponent } from '../_framework/pagination/pagination.compone
     ReactiveFormsModule,
     CommonModule,
     RouterModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    GraphtyModule
   ],
   exports: [
     NavbarComponent,

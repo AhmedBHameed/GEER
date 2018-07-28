@@ -1,7 +1,8 @@
-import { Component, forwardRef, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, forwardRef, OnDestroy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { environment } from '../../../environments/environment';
 
+import { codesampleLanguages } from './supported-languages';
 
 declare var tinymce: any;
 @Component({
@@ -14,15 +15,11 @@ declare var tinymce: any;
     multi: true
   }]
 })
-export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueAccessor {
+export class TinymceComponent implements OnDestroy, ControlValueAccessor {
   onChange: any = (v: any) => {};
   onTouched: any = (v: any) => {};
 
   tinyMCE: any = tinymce;
-
-  ngAfterViewInit() {
-    
-  }
 
   tinyMCEInit(initContent: string) {
     if (this.tinyMCE) {
@@ -32,6 +29,8 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
           selector: '.tinymce',
           height: 500,
           theme: 'modern',
+          branding: false,
+          browser_spellcheck: true,
           plugins: [
             'advlist autolink lists link image charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks visualchars code fullscreen',
@@ -40,22 +39,11 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
           ],
           toolbar1: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify',
           toolbar2: 'bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons | codesample help',
-          codesample_languages: [
-              {text: 'HTML/XML', value: 'markup'},
-              {text: 'JavaScript', value: 'javascript'},
-              {text: 'CSS', value: 'css'},
-              {text: 'PHP', value: 'php'},
-              {text: 'Ruby', value: 'ruby'},
-              {text: 'Python', value: 'python'},
-              {text: 'Java', value: 'java'},
-              {text: 'C', value: 'c'},
-              {text: 'C#', value: 'csharp'},
-              {text: 'C++', value: 'cpp'}
-          ],
+          codesample_languages: codesampleLanguages,
           codesample_content_css: '/assets/css/prism.css',
           setup: (editor: any) => {
-            editor.on('keyup dirty', () => {
-              this.onChange(editor.getContent());
+            editor.on('Change keyup dirty', () => {
+              this.onChange(encodeURIComponent(editor.getContent()));
             });
           },
           file_browser_callback: (field_name, url, type, win) => {
@@ -79,7 +67,7 @@ export class TinymceComponent implements AfterViewInit, OnDestroy, ControlValueA
           }
       });
     }
-    this.tinyMCE.activeEditor.setContent(initContent);
+    this.tinyMCE.activeEditor.setContent(decodeURIComponent(initContent));
   }
   /**
    * Summary: Destroy tinyMCE.

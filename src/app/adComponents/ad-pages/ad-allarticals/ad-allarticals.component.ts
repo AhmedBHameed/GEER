@@ -1,17 +1,17 @@
 import { Component, Injector, OnInit, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../../../environments/environment';
+import { GqlQueryInterface, GraphtyService } from 'graphty';
 
 // Services
 import { BaseApis } from '../../../_services/base-apis';
 import { FormsService, ValidatorsService } from '../../../_services/_functions/forms';
-import { MultimediaService } from '../../../_services';
 
 @Component({
    selector: 'app-ad-allarticals',
    templateUrl: './ad-allarticals.component.html',
    styleUrls: ['./ad-allarticals.component.css'],
-   providers: [FormsService, MultimediaService]
+   providers: [FormsService]
 })
 export class AdAllarticalsComponent extends BaseApis implements OnInit {
    isDataLoaded: boolean = false;
@@ -29,7 +29,7 @@ export class AdAllarticalsComponent extends BaseApis implements OnInit {
    constructor(
       protected injector: Injector,
       private fs: FormsService,
-      private multi: MultimediaService,
+      private graf: GraphtyService,
       private ar: ActivatedRoute) {
       super(injector);
    }
@@ -43,80 +43,49 @@ export class AdAllarticalsComponent extends BaseApis implements OnInit {
    }
 
    api_getArticalsRows() {
-      const gqlGetArticalsAndArticalsRows = {
-         query: `
-            {
-               getArticalsRows {
-                  rows
-               },
-               getArticals(
-                  page: ${this.opt.currentPage},
-                  limit: ${this.opt.itemsPerPage}
-               ) {
-                  id,
-                  title,
-                  artical,
-                  category,
-                  category_name,
-                  image,
-                  author,
-                  author_name,
-                  status,
-                  date
-               }
-            }
-         `
-      };
-      this.httpService.post(gqlGetArticalsAndArticalsRows).subscribe(
+      let getArticalsAndArticalsRows: GqlQueryInterface = this.graf.combine([
+         this.graf.stagnation({
+            fun: {
+               name: 'getArticalsRows'
+            },
+            ret: ['rows']
+         }),
+         this.graf.stagnation({
+            fun: {
+               name: 'getArticals',
+               args: { page: +this.opt.currentPage, limit: this.opt.itemsPerPage }
+            },
+            ret: ['id', 'title', 'artical', 'category', 'category_name', 'image', 'author', 'author_name', 'status', 'date']
+         })
+      ]);
+      this.httpService.post(getArticalsAndArticalsRows).subscribe(
          (res: any) => {
-            res = res.json();
-            if (this.httpService.hasError(res)) {
-               this.notiService.message(res, true);
-               return;
-            }
-            this.opt.totalItems = res.data.getArticalsRows.rows;
-            this.articals = res.data.getArticals;
+            this.opt.totalItems = res.getArticalsRows.rows;
+            this.articals = res.getArticals;
             this.isDataLoaded = true;
          },
          (err: any) => {
-            console.error(err.json().errors[0].message);
+            this.notiService.message(err.json().errors[0].message, true);
          }
       );
    }
+
    api_getArticals(page: number = this.opt.currentPage) {
-      const gqlGetArticals = {
-         query: `
-        {
-          getArticals(
-            page: ${page},
-            limit: ${this.opt.itemsPerPage}
-          ) {
-            id,
-            title,
-            artical,
-            category,
-            category_name,
-            image,
-            author,
-            author_name,
-            status,
-            date
-          }
-        }
-    `};
+      let getArticals: GqlQueryInterface = this.graf.stagnation({
+         fun: {
+            name: 'getArticals',
+            args: { page: +page, limit: +this.opt.itemsPerPage }
+         },
+         ret: ['id', 'title', 'artical', 'category', 'category_name', 'image', 'author', 'author_name', 'status', 'date']
+      });
       this.isDataLoaded = false;
-      this.httpService.post(gqlGetArticals).subscribe(
+      this.httpService.post(getArticals).subscribe(
          (res: any) => {
-            res = res.json();
-            if (this.httpService.hasError(res)) {
-               this.notiService.message(res, true);
-               return;
-            }
-            this.articals = res.data.getArticals;
+            this.articals = res.getArticals;
             this.isDataLoaded = true;
          },
          (err: any) => {
-            console.error(err.json().errors[0].message);
+            this.notiService.message(err.json().errors[0].message, true);
          }
       );
    }
@@ -124,48 +93,29 @@ export class AdAllarticalsComponent extends BaseApis implements OnInit {
    private _api_changeArticalStatus(articalObj: any, index: number) {
       let status;
       (articalObj.status == 'published') ? status = 'dreft' : status = 'published';
-
-      const gqlUpdateArticalsStatus = {
-         query: `
-        mutation {
-          updateArtical(
-            title: "${articalObj.title}",
-            id: ${articalObj.id},
-            status: "${status}",
-            artical: "${articalObj.post}",
-            category: ${articalObj.category},
-            image: "${articalObj.image}",
-            author: ${articalObj.author},
-            token: "${this.authService.getToken()}"
-          ) {
-            id,
-            title,
-            artical,
-            category,
-            image,
-            author,
-            author_name,
-            status,
-            date,
-            ack {
-              ok,
-              message
+      let updateArticalsStatus: GqlQueryInterface = this.graf.stagnation({
+         fun: {
+            name: 'updateArtical',
+            args: { 
+               title: articalObj.title,
+               id: articalObj.id,
+               status: status,
+               artical: articalObj.post,
+               category: articalObj.category,
+               image: articalObj.image,
+               author: articalObj.author,
+               token: this.authService.getToken()
             }
-          }
-        }
-    `};
-      this.httpService.post(gqlUpdateArticalsStatus).subscribe(
+         },
+         ret: ['id', 'title', 'artical', 'category', 'category_name', 'image', 'author', 'author_name', 'status', 'date', 'ack{ok,message}']
+      }); 
+      this.httpService.post(updateArticalsStatus).subscribe(
          (res: any) => {
-            res = res.json();
-            if (this.httpService.hasError(res)) {
-               this.notiService.message(res, true);
-               return;
-            }
-            this.notiService.message(res.data.updateArtical.ack.message);
-            this.articals[index]['status'] = res.data.updateArtical.status;
+            this.notiService.message(res.updateArtical.ack.message);
+            this.articals[index]['status'] = res.updateArtical.status;
          },
          (err: any) => {
-            console.error(err.json().errors[0].message);
+            this.notiService.message(err.json().errors[0].message, true);
          }
       );
    }
@@ -188,34 +138,25 @@ export class AdAllarticalsComponent extends BaseApis implements OnInit {
    }
 
    deleteArticalIndex(index: number) {
-      let gqlDeleteArtical = {
-         query: `
-            mutation {
-               deleteArtical(
-                  id: ${this.articals[index].id},
-                  token: "${this.authService.getToken()}"
-               ){
-                  ack {
-                     ok,
-                     message
-                  }
-               }
+      let deleteArtical: GqlQueryInterface = this.graf.stagnation({
+         fun: {
+            name: 'deleteArtical',
+            args: {
+               id: this.articals[index].id,
+               token: this.authService.getToken()
             }
-         `
-      }
-      this.httpService.post(gqlDeleteArtical).subscribe(
+         },
+         ret: ['ack{ok,message}']
+      });
+      
+      this.httpService.post(deleteArtical).subscribe(
          (res: any) => {
-            res = res.json();
-            if (this.httpService.hasError(res)) {
-               this.notiService.message(res, true);
-               return;
-            }
-            this.notiService.message(res.data.deleteArtical.ack.message);
+            this.notiService.message(res.deleteArtical.ack.message);
             this.articals = this.fs.removeRow(this.articals, index);
             this.api_getArticalsRows();
          },
          (err: any) => {
-            console.error(err.json().errors[0].message);
+            this.notiService.message(err.json().errors[0].message, true);
          }
       );
    }

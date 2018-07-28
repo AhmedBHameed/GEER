@@ -3,3 +3,4 @@ export { NotificationsService } from './notifications/notifications.service';
 export { SharedDataService } from './shared-data/shared-data.service';
 export { AuthService } from './authentication/auth.service';
 export { MultimediaService } from './_multimedia/multimedia.service';
+export { GraphtyModule, GraphtyService} from './_graphty';

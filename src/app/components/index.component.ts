@@ -5,6 +5,7 @@ import { AuthService, HttpService, SharedDataService, NotificationsService} from
 
 // Graphql queries
 import { gqlSettings } from '../_gql_queries';
+import { pluck } from 'rxjs/operators';
 
 // import { ApolloClient } from '../../_client/client';
 // import gql from 'graphql-tag';
@@ -61,13 +62,12 @@ export class IndexComponent implements OnInit {
     if (geertoken) {
       this.auth.checkToken().subscribe(
         (res: any) => {
-          this.http.hasError(res);
-          res = res.json();
-          if (!res.data.checkToken.ack.ok) return;
+          if (!res.ack.ok) return;
           this.sharedData.isAdmin = true;
         },
         (err: any) => {
-          console.error(err);
+          console.log(err);
+          this.notify.message(err, true);
         }
       );
     } else {
@@ -77,16 +77,11 @@ export class IndexComponent implements OnInit {
     if (!this.sharedData.settings) {
       this.http.post(gqlSettings).subscribe(
         (res: any) => {
-          res = res.json();
-          if (this.http.hasError(res)) {
-            this.notify.message(res);
-            return false;
-          }
-          this.sharedData.settings = res.data.getSettings;
+          this.sharedData.settings = res.getSettings;
           this.settingsLoaded = true;
         },
         (err: any) => {
-          console.error(err);
+          this.notify.message(err, true);
         }
       );
     } else {

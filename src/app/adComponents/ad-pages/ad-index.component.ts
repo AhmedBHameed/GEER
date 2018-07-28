@@ -46,23 +46,18 @@ export class AdIndexComponent extends BaseApis implements OnInit {
 
       this.authService.checkToken().subscribe(
          (res: any) => {
-            res = res.json();
-            if (this.httpService.hasError(res)) {
-               this.notiService.message(res);
-               this.authService.redirectTo(['login']);
-               return false;
-            }
-            if (res.data.checkToken.isActive) {
+            if (res.isActive) {
                this.isThatAdmin = this.sharedData.isAdmin = true;
-               this.sharedData.userData.username = res.data.checkToken.username;
-               this.sharedData.userData.id = res.data.checkToken.id;
+               this.sharedData.userData.username = res.username;
+               this.sharedData.userData.id = res.id;
             } else {
                this.authService.redirectTo(['/']);
             }
-            this.notiService.message(res.data.checkToken.ack.message);
+            this.notiService.message(res.ack.message);
          },
          (err: any) => {
-            console.error(err.errors[0].message);
+            this.authService.redirectTo(['login']);
+            this.notiService.message(err.json().errors[0].message);
          });
    }
    doNavbarAction(action: string) {

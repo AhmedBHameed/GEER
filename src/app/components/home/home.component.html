@@ -31,7 +31,7 @@
                     </h3>
 
                     <p class="lead padding-top" style="margin-bottom:0px; font-size: 16px;">
-                      {{artical.artical | striptags | trim: 150}}
+                      {{artical.artical | parseUri | trim: 150}}
                       <span class="h3"></span>
                     </p>
                     <br>

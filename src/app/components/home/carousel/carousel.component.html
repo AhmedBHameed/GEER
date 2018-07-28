@@ -19,7 +19,7 @@
 						  <img src="{{url+data.po_image}}" alt="...">
 						  <div class="tour-caption">
 							  <a [routerLink]="['','post', data.po_post_id]"><h2>{{data.po_title}}</h2></a>
-							  <div>{{data.po_post | striptags | trim: 150}}</div>
+							  <div>{{data.po_post | parseUri | trim: 150}}</div>
 						  </div>
 					  </div>
 

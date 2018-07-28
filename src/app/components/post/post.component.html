@@ -18,7 +18,7 @@
                </a>
             </div>
          </div>
-         <div class="articalbody padding-top" [innerHTML]="artical.artical"></div>
+         <div class="articalbody padding-top" #articalBody [innerHTML]="artical.artical | parseUri | safeHtml"></div>
       </div>
       <div class="clearfix"></div>
    </section>

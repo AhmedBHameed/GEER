@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions, RequestMethod, Request } from '@angular/http';
 import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
 
 declare let window: any;
 @Injectable({
@@ -65,14 +66,14 @@ export class HttpService {
     }
     return this.http.request(new Request(opt));
   }
-  hasError(respond: any): boolean {
-    return respond.errors ? true : false;
-  }
+  // hasError(respond: any): boolean {
+  //   return respond.errors ? true : false;
+  // }
   get(graphqlQuery) {
-    return this.makeRequest('graphql', 'Get', graphqlQuery);
+    return this.makeRequest('graphql', 'Get', graphqlQuery).pipe(map(data=>data.json().data));
   }
   post(graphqlQuery) {
-    return this.makeRequest('graphql', 'Post', graphqlQuery);
+    return this.makeRequest('graphql', 'Post', graphqlQuery).pipe(map(data=>data.json().data));
   }
   packBinaryForm(GrqphQLQueryObj: any, objOfBinaries: any) {
     const requestObject: any = new FormData();
@@ -81,7 +82,7 @@ export class HttpService {
     for (let key in objOfBinaries) {
       requestObject.append(key, objOfBinaries[key]);
     }
-    return this.makeBinaryRequest('graphql', 'Post', requestObject);
+    return this.makeBinaryRequest('graphql', 'Post', requestObject).pipe(map(data=>data.json().data));
   }
   // private makeRequestJsonp(page=null, data=null){ // this is jsonp request
   //     let header = new Headers(), opt;

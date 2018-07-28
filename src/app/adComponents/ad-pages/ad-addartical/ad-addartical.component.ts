@@ -1,5 +1,6 @@
 import { Component, Injector, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GqlQueryInterface, GraphtyService } from 'graphty';
 import { FormGroup } from '@angular/forms';
 import { environment } from '../../../../environments/environment';
 
@@ -27,13 +28,14 @@ export class AdAddarticalComponent extends BaseApis implements OnInit {
       protected injector: Injector,
       private fs: FormsService,
       private ar: ActivatedRoute,
+      private graf: GraphtyService,
       private multi: MultimediaService) {
-         super(injector);
+      super(injector);
    }
 
    ngOnInit() {
       this.articalForm = this.fs.group([
-         { key: 'id', defaultValue: ''},
+         { key: 'id', defaultValue: '' },
          { key: 'title', defaultValue: '', validators: [ValidatorsService.required(), ValidatorsService.minLength(3)] },
          { key: 'category', defaultValue: '', validators: [ValidatorsService.required()] },
          { key: 'status', defaultValue: 'dreft' },
@@ -55,7 +57,7 @@ export class AdAddarticalComponent extends BaseApis implements OnInit {
    reset() {
       this.articalForm = this.fs.reset(this.articalForm);
       this.fileInputEl.nativeElement.value = '';
-      if ( !/safari/i.test(navigator.userAgent) ) {
+      if (!/safari/i.test(navigator.userAgent)) {
          this.fileInputEl.nativeElement.type = '';
          this.fileInputEl.nativeElement.type = 'file';
       }
@@ -63,70 +65,54 @@ export class AdAddarticalComponent extends BaseApis implements OnInit {
 
    send(data: any, isValid: boolean) {
       this.submitted = true;
-      let gqlAddUpdateArtical: any;
+      let AddUpdateArtical: GqlQueryInterface;
       if (isValid) {
          if (this.isUpdateMood) {
-            gqlAddUpdateArtical = {
-               variables: null,
-               query: `
-                  mutation {
-                     updateArtical(
-                        id: ${data.id},
-                        token: "${this.authService.getToken()}",
-                        title: "${data.title}",
-                        category: ${+data.category},
-                        status: "${data.status}",
-                        artical: "${data.artical}",
-                        author: ${this.sharedData.userData.id}
-                     ) {
-                        ack {
-                           ok,
-                           message
-                        }
-                     }
+            AddUpdateArtical = this.graf.mutation({
+               fun: {
+                  name: 'updateArtical',
+                  args: {
+                     id: +data.id,
+                     token: this.authService.getToken(),
+                     title: data.title,
+                     category: +data.category,
+                     status: data.status,
+                     artical: data.artical,
+                     author: +this.sharedData.userData.id,
+                     image: this.sharedData.updateArtical.articalObj.image
                   }
-               `
-            };
+               },
+               ret: ['ack{ok,message}']
+            });
          } else {
-            gqlAddUpdateArtical = {
-               variables: null,
-               query: `
-                  mutation {
-                  addArtical(
-                     token: "${this.authService.getToken()}",
-                     title: "${data.title}",
-                     category: ${+data.category},
-                     status: "${data.status}",
-                     artical: "${data.artical}",
-                     author: ${this.sharedData.userData.id}
-                  ) {
-                     ack {
-                        ok,
-                        message
-                     }
+            AddUpdateArtical = this.graf.mutation({
+               fun: {
+                  name: 'addArtical',
+                  args: {
+                     token: this.authService.getToken(),
+                     title: data.title,
+                     category: +data.category,
+                     status: data.status,
+                     artical: data.artical,
+                     author: +this.sharedData.userData.id
                   }
-                  }
-               `
-            };
+               },
+               ret: ['ack{ok,message}']
+            });
          }
-         this.httpService.packBinaryForm(gqlAddUpdateArtical, { image: this.articalForm.value.image }).subscribe(
+         this.httpService.packBinaryForm(AddUpdateArtical, { image: this.articalForm.value.image }).subscribe(
             (res: any) => {
-               res = res.json();
-               if (this.httpService.hasError(res)) {
-                  this.notiService.message(res, true);
-                  return;
-               }
                this.fs.reset(this.articalForm);
                if (this.isUpdateMood) {
-                  this.notiService.message(res.data.updateArtical.ack.message);
+                  this.notiService.message(res.updateArtical.ack.message);
                   this.authService.redirectTo(['admin', 'allarticals', this.sharedData.updateArtical.onPage]);
                } else {
-                  this.notiService.message(res.data.addArtical.ack.message);
+                  this.notiService.message(res.addArtical.ack.message);
                   this.reset();
                }
             },
             (err: any) => {
-               console.error(err.errors[0].message);
+               this.notiService.message(err.json().errors[0].message);
             });
       }
    }
